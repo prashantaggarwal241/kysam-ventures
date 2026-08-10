@@ -17,6 +17,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#0F2A4A',
     },
   },
+  web: {
+    bundler: 'metro',
+    output: 'static',
+  },
   extra: {
     apiBaseUrl: process.env.EXPO_PUBLIC_API_BASE_URL ?? '',
   },
