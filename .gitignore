@@ -39,6 +39,32 @@ ScaffoldingReadMe.txt
 # dotenv environment variables file
 .env
 
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# TypeScript
+*.tsbuildinfo
+
+# Jest
+coverage/
+
+# macOS
+.DS_Store
+
+# Visual Studio / VS Code workspace state
+.vs/
+
 # Others
 ~$*
 *~
