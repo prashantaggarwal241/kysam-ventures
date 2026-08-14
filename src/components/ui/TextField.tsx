@@ -54,7 +54,7 @@ export default function TextField({
         onBlur={() => setIsFocused(false)}
         accessibilityLabel={label}
         accessibilityHint={error}
-        accessibilityRequired={required}
+        aria-required={required}
       />
       {error ? (
         <Text style={styles.errorText} accessibilityRole="alert">

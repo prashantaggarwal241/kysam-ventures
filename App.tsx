@@ -3,9 +3,10 @@ import { useCallback } from 'react';
 import { Platform, View } from 'react-native';
 import {
   useFonts,
-  SpaceGrotesk_500Medium,
-  SpaceGrotesk_600SemiBold,
-} from '@expo-google-fonts/space-grotesk';
+  IBMPlexSans_500Medium,
+  IBMPlexSans_600SemiBold,
+  IBMPlexSans_700Bold,
+} from '@expo-google-fonts/ibm-plex-sans';
 import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
 import SrcApp from './src/root/App';
@@ -16,8 +17,9 @@ if (Platform.OS !== 'web') {
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
-    SpaceGrotesk_500Medium,
-    SpaceGrotesk_600SemiBold,
+    IBMPlexSans_500Medium,
+    IBMPlexSans_600SemiBold,
+    IBMPlexSans_700Bold,
     Inter_400Regular,
     Inter_500Medium,
   });

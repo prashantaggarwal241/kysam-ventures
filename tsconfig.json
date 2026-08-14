@@ -8,13 +8,18 @@
     "lib": [
       "ESNext"
     ],
+    "types": [
+      "jest",
+      "node"
+    ],
     "moduleResolution": "bundler",
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "ignoreDeprecations": "5.0"
   },
   "include": [
     "**/*.ts",
