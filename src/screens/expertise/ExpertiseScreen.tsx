@@ -1,13 +1,12 @@
 import { View, StyleSheet } from 'react-native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import SectionLabel from '../../components/ui/SectionLabel';
 import Chip from '../../components/ui/Chip';
 import { expertiseAreas, industries } from '../../constants/content';
 import { theme } from '../../theme';
-import type { RootTabParamList } from '../../navigation/types';
+import type { ScreenProps } from '../../navigation/types';
 
-export type ExpertiseScreenProps = BottomTabScreenProps<RootTabParamList, 'Expertise'>;
+export type ExpertiseScreenProps = ScreenProps;
 
 export default function ExpertiseScreen(_: ExpertiseScreenProps) {
   return (

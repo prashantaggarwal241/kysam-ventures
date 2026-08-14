@@ -2,28 +2,41 @@ import { View, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ReactNode } from 'react';
 import { theme } from '../../theme';
+import Footer from './Footer';
 
-// Excludes bottom edge — the custom tab bar handles the bottom safe-area inset itself.
-const SAFE_EDGES = ['top', 'left', 'right'] as const;
+// TopNav handles the top inset; ScreenContainer covers left, right, bottom.
+const SAFE_EDGES = ['left', 'right', 'bottom'] as const;
 
 export interface ScreenContainerProps {
   children: ReactNode;
   scrollable?: boolean;
+  /** Pass true to suppress the automatic Footer (e.g. when screen needs a custom footer). */
+  noFooter?: boolean;
 }
 
-export default function ScreenContainer({ children, scrollable = true }: ScreenContainerProps) {
+export default function ScreenContainer({
+  children,
+  scrollable = true,
+  noFooter = false,
+}: ScreenContainerProps) {
+  const footer = noFooter ? null : <Footer />;
+
   if (scrollable) {
     return (
       <SafeAreaView style={styles.safeArea} edges={SAFE_EDGES}>
         <ScrollView style={styles.flex} contentContainerStyle={styles.content}>
           {children}
+          {footer}
         </ScrollView>
       </SafeAreaView>
     );
   }
   return (
     <SafeAreaView style={styles.safeArea} edges={SAFE_EDGES}>
-      <View style={[styles.flex, styles.content]}>{children}</View>
+      <View style={[styles.flex, styles.content]}>
+        {children}
+        {footer}
+      </View>
     </SafeAreaView>
   );
 }

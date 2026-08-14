@@ -24,11 +24,13 @@ requested. Do not introduce new libraries without asking first.
 |---|---|
 | Framework | React Native (Expo, managed workflow) |
 | Language | TypeScript, `strict: true` |
-| Navigation | React Navigation (bottom tabs + native stack) |
+| Navigation | Custom top nav bar (`components/layout/TopNav.tsx`) with an animated sliding underline — NOT bottom tabs. Horizontally scrollable on narrow viewports, never a hamburger menu. |
+| Animation | `react-native-reanimated` (nav underline, growth chart bars/line, marquee, counters) |
+| Graphics | `react-native-svg` (logo mark, growth chart) |
 | Styling | `StyleSheet.create` + centralized theme tokens (no styled-components, no NativeWind, no inline hex/px) |
 | HTTP | `fetch` wrapped in a single typed API client (no axios unless a real need appears) |
 | Forms | Local component state + a shared validation util (no Formik/RHF for this small a form set) |
-| Fonts | Space Grotesk (display), Inter (body) via `expo-font` |
+| Fonts | IBM Plex Sans (display/headings, weights 500/600/700), Inter (body, weights 400/500) via `expo-font` |
 | Icons | `@expo/vector-icons` (Tabler-style outline set, or `react-native-vector-icons` if unavailable) |
 | Testing | Jest + React Native Testing Library |
 | Linting | ESLint (`@react-native`, `@typescript-eslint`) + Prettier |
@@ -48,8 +50,8 @@ src/
     RootNavigator.tsx
 
   navigation/
-    TabNavigator.tsx
-    types.ts                 # route param types, no `any`
+    TopNav.tsx                 # animated top nav bar, replaces bottom tabs
+    types.ts                   # route param types, no `any`
 
   screens/
     home/
@@ -79,9 +81,12 @@ src/
       IconBadge.tsx
       TextField.tsx
       SectionLabel.tsx
+      Logo.tsx                 # SVG logomark, accepts a size prop
+      GrowthChart.tsx           # animated bar/line chart, accepts data via props
+      Marquee.tsx                # looping horizontal scroll, accepts items via props
     layout/
       ScreenContainer.tsx     # safe area + background wrapper
-      TabBar.tsx
+      Footer.tsx                # shown on every screen, not per-screen duplicated
 
   theme/
     colors.ts
@@ -125,34 +130,39 @@ once in `theme/`, never restate the raw values anywhere else in the app.
 ```ts
 // theme/colors.ts
 export const colors = {
+  navyHero: '#0A2340',
   navy: '#0F2A4A',
-  navyDeep: '#154C82',
+  navyDeep: '#0F3A66',
   blue: '#1C87C9',
-  blueLight: '#7CB4DE',
+  blueLight: '#4FA3D9',
+  blueLighter: '#7CC3E8',
   blueTintLight: '#CFE3F3',
   blueTint: '#EAF4FC',
   amber: '#F5A623',
+  amberOuter: '#FFC266',
   amberTint: '#FEF3E2',
   amberTextOnTint: '#8A5A0B',
   amberTextOnFill: '#442D06',
   background: '#FAFAF7',
   surface: '#FFFFFF',
+  surfaceAlt: '#F8F7F3',
   border: '#ECE9DE',
-  textPrimary: '#0F2A4A',
-  textSecondary: '#4E5761',
-  textMuted: '#7A7563',
-  navInactive: '#B4AF9E',
+  textPrimary: '#0A2340',
+  textSecondary: '#6B7280',
+  textMuted: '#9A9585',
+  textOnDark: '#FFFFFF',
+  textOnDarkMuted: '#9DBEDD',
 } as const;
 ```
 
 ```ts
 // theme/typography.ts
 export const typography = {
-  fontDisplay: 'SpaceGrotesk_600SemiBold',
-  fontDisplayMedium: 'SpaceGrotesk_500Medium',
+  fontDisplay: 'IBMPlexSans_600SemiBold',
+  fontDisplayBold: 'IBMPlexSans_700Bold',
   fontBody: 'Inter_400Regular',
   fontBodyMedium: 'Inter_500Medium',
-  size: { h1: 23, h2: 18, h3: 15, body: 13, small: 11, caption: 9.5 },
+  size: { h1: 32, h2: 20, h3: 16, body: 13, small: 11, caption: 9.5 },
 } as const;
 ```
 
@@ -240,17 +250,24 @@ for this repo.
 ## 6. Build order (suggested prompts to give Copilot, in sequence)
 
 1. "Scaffold the Expo + TypeScript project with the folder structure and
-   theme tokens from `.github/copilot-instructions.md`, no screens yet."
+   theme tokens from `.github/copilot-instructions.md`, no screens yet." ✅
 2. "Build the `components/ui` kit: Button, Card, Chip, IconBadge, TextField,
-   SectionLabel — theme-driven, no business logic, with render tests."
+   SectionLabel — theme-driven, no business logic, with render tests." ✅
 3. "Build `services/apiClient.ts` and the typed `*Api.ts` modules for
    company, services, expertise, and contact endpoints, matching the FRS
-   error/response shapes."
-4. "Build the bottom tab navigator with the 5 screens as empty containers
-   using `ScreenContainer`."
-5. "Build the Home screen using only components from `components/ui`."
-6. Repeat per screen: Services, Expertise, About, then Contact (Contact last —
-   it depends on `useContactForm` + `contactApi`).
+   error/response shapes. Not called from any screen yet — inert scaffolding
+   for Phase 2." ✅
+4. "Build the navigation shell and populate all 5 screens with static
+   content from `constants/content.ts`." ✅ (superseded by step 5 below —
+   nav pattern changed from bottom tabs to top nav after this step)
+5. Rebuild navigation as the animated `TopNav` (section 2/3 above) and
+   rebuild Home/About to the approved design: dark hero with a `K`
+   watermark, `GrowthChart`, live counter, `Marquee`, philosophy pull-quote,
+   `Footer`. IBM Plex Sans replaces Space Grotesk throughout. — *current
+   step*
+6. Services, Expertise, Contact screens brought in line with the same
+   visual language (dark featured-service card, pull-quote styling
+   patterns, etc.) if not already consistent after step 5.
 
 Building the UI kit and API layer before any screen is what prevents the
 tight coupling — screens are wired against contracts that already exist.

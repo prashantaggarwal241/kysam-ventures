@@ -1,13 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import Card from '../../components/ui/Card';
 import IconBadge from '../../components/ui/IconBadge';
 import { services } from '../../constants/content';
 import { theme } from '../../theme';
-import type { RootTabParamList } from '../../navigation/types';
+import type { ScreenProps } from '../../navigation/types';
 
-export type ServicesScreenProps = BottomTabScreenProps<RootTabParamList, 'Services'>;
+export type ServicesScreenProps = ScreenProps;
 
 export default function ServicesScreen(_: ServicesScreenProps) {
   return (
@@ -41,7 +40,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.xs,
   },
   name: {
-    fontFamily: theme.typography.fontDisplayMedium,
+    fontFamily: theme.typography.fontDisplay,
     fontSize: theme.typography.size.h3,
     color: theme.colors.textPrimary,
   },

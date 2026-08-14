@@ -1,0 +1,37 @@
+import { useState } from 'react';
+import { View, StyleSheet } from 'react-native';
+import TopNav from '../components/layout/TopNav';
+import type { RouteKey } from './types';
+import HomeScreen from '../screens/home/HomeScreen';
+import AboutScreen from '../screens/about/AboutScreen';
+import ServicesScreen from '../screens/services/ServicesScreen';
+import ExpertiseScreen from '../screens/expertise/ExpertiseScreen';
+import ContactScreen from '../screens/contact/ContactScreen';
+
+export default function TopNavigator() {
+  const [activeRoute, setActiveRoute] = useState<RouteKey>('Home');
+
+  const navigate = (route: RouteKey) => setActiveRoute(route);
+
+  return (
+    <View style={styles.container}>
+      <TopNav activeRoute={activeRoute} onNavigate={navigate} />
+      <View style={styles.screen}>
+        {activeRoute === 'Home'      && <HomeScreen navigate={navigate} />}
+        {activeRoute === 'About'     && <AboutScreen navigate={navigate} />}
+        {activeRoute === 'Services'  && <ServicesScreen navigate={navigate} />}
+        {activeRoute === 'Expertise' && <ExpertiseScreen navigate={navigate} />}
+        {activeRoute === 'Contact'   && <ContactScreen navigate={navigate} />}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  screen: {
+    flex: 1,
+  },
+});

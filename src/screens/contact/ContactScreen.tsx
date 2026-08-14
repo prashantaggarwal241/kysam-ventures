@@ -1,5 +1,4 @@
 import { View, Text, Linking, StyleSheet } from 'react-native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import Card from '../../components/ui/Card';
 import SectionLabel from '../../components/ui/SectionLabel';
@@ -7,9 +6,9 @@ import IconBadge from '../../components/ui/IconBadge';
 import Button from '../../components/ui/Button';
 import { contactContent } from '../../constants/content';
 import { theme } from '../../theme';
-import type { RootTabParamList } from '../../navigation/types';
+import type { ScreenProps } from '../../navigation/types';
 
-export type ContactScreenProps = BottomTabScreenProps<RootTabParamList, 'Contact'>;
+export type ContactScreenProps = ScreenProps;
 
 export default function ContactScreen(_: ContactScreenProps) {
   const handleEmail = () => {

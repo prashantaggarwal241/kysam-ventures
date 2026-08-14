@@ -1,10 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
-import TabNavigator from '../navigation/TabNavigator';
+import TopNavigator from '../navigation/TopNavigator';
 
 export default function RootNavigator() {
-  return (
-    <NavigationContainer>
-      <TabNavigator />
-    </NavigationContainer>
-  );
+  return <TopNavigator />;
 }

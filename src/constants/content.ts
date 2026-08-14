@@ -12,11 +12,21 @@ export interface ServiceContent {
   icon: IoniconName;
 }
 
+export interface FactCard {
+  stat: string;
+  label: string;
+}
+
 export const homeContent = {
   eyebrow: 'BUILD · GROW · CREATE VALUE',
   heading: 'Technology.\nExpertise.\nBusiness impact.',
   subtext:
     'We help businesses modernise platforms, build scalable solutions, and create lasting technology partnerships.',
+  factCards: [
+    { stat: 'Graduates and engineers', label: 'From renowned universities' },
+    { stat: 'Executive and consulting', label: 'Partner or advisor roles' },
+    { stat: 'Target-oriented delivery', label: 'Outcomes over output' },
+  ] as FactCard[],
 } as const;
 
 export const whyKysam: WhyKysamItem[] = [
@@ -87,6 +97,10 @@ export const aboutContent = {
   eyebrow: 'FOUNDED · DELHI, INDIA',
   heading: 'Building Technology Partnerships That Last',
   body: 'KySam Ventures is a Delhi-based IT consultancy dedicated to helping businesses modernise platforms, build scalable solutions, and create lasting technology partnerships. Founded with a mission to bridge the gap between business needs and technology capabilities, we deliver enterprise-grade solutions with the agility of a boutique firm.',
+  intro:
+    'KySam Ventures was formed by a group of professionals with wide exposure across information technology — young, qualified business graduates and engineers from renowned universities. Our team has consistently provided reliable support and consultancy to a wide variety of corporate houses, as executive, business partner, and consultant.',
+  philosophy:
+    'Our philosophy is building long-term business partnerships — where interpersonal relationship, reliability, assured quality, and target-oriented modern technology are the major building blocks.',
 } as const;
 
 export const coreValues: string[] = [
