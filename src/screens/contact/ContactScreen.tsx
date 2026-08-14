@@ -1,5 +1,6 @@
 import { View, Text, Linking, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
+import PageWrapper from '../../components/layout/PageWrapper';
 import Card from '../../components/ui/Card';
 import SectionLabel from '../../components/ui/SectionLabel';
 import IconBadge from '../../components/ui/IconBadge';
@@ -17,25 +18,27 @@ export default function ContactScreen(_: ContactScreenProps) {
 
   return (
     <ScreenContainer>
-      <View style={styles.section}>
-        <SectionLabel>Get in touch</SectionLabel>
-        <Card variant="surface" style={styles.contactCard}>
-          <View style={styles.contactRow}>
-            <IconBadge iconName="mail-outline" tone="blue" size="sm" />
-            <Text style={styles.contactText}>{contactContent.email}</Text>
-          </View>
-          <View style={styles.contactRow}>
-            <IconBadge iconName="location-outline" tone="blue" size="sm" />
-            <Text style={styles.contactText}>{contactContent.location}</Text>
-          </View>
-        </Card>
-      </View>
+      <PageWrapper>
+        <View style={styles.section}>
+          <SectionLabel>Get in touch</SectionLabel>
+          <Card variant="surface" style={styles.contactCard}>
+            <View style={styles.contactRow}>
+              <IconBadge iconName="mail-outline" tone="blue" size="sm" />
+              <Text style={styles.contactText}>{contactContent.email}</Text>
+            </View>
+            <View style={styles.contactRow}>
+              <IconBadge iconName="location-outline" tone="blue" size="sm" />
+              <Text style={styles.contactText}>{contactContent.location}</Text>
+            </View>
+          </Card>
+        </View>
 
-      <Button
-        label="Send us a message"
-        onPress={handleEmail}
-        accessibilityLabel="Send an email to KySam Ventures"
-      />
+        <Button
+          label="Send us a message"
+          onPress={handleEmail}
+          accessibilityLabel="Send an email to KySam Ventures"
+        />
+      </PageWrapper>
     </ScreenContainer>
   );
 }

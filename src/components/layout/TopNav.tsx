@@ -15,7 +15,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Logo from '../ui/Logo';
-import { theme } from '../../theme';
+import { theme, maxContentWidth } from '../../theme';
 import type { RouteKey } from '../../navigation/types';
 
 const NAV_ITEMS: { route: RouteKey; label: string }[] = [
@@ -171,6 +171,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: theme.spacing.md,
     gap: theme.spacing.sm,
+    width: '100%',
+    maxWidth: maxContentWidth,
+    alignSelf: 'center',
   },
   logoSection: {
     flexDirection: 'row',

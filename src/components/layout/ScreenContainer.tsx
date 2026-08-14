@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: theme.spacing.lg,
+    flexGrow: 1,
   },
 });

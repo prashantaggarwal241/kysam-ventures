@@ -1,5 +1,6 @@
 import { View, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
+import PageWrapper from '../../components/layout/PageWrapper';
 import SectionLabel from '../../components/ui/SectionLabel';
 import Chip from '../../components/ui/Chip';
 import { expertiseAreas, industries } from '../../constants/content';
@@ -11,29 +12,31 @@ export type ExpertiseScreenProps = ScreenProps;
 export default function ExpertiseScreen(_: ExpertiseScreenProps) {
   return (
     <ScreenContainer>
-      <View style={styles.section}>
-        <SectionLabel>Areas of Expertise</SectionLabel>
-        <View style={styles.twoColGrid}>
-          {expertiseAreas.map(area => (
-            <View key={area} style={styles.gridCell}>
-              <Chip label={area} tone="blue" />
-            </View>
-          ))}
+      <PageWrapper>
+        <View style={styles.section}>
+          <SectionLabel>Areas of Expertise</SectionLabel>
+          <View style={styles.twoColGrid}>
+            {expertiseAreas.map(area => (
+              <View key={area} style={styles.gridCell}>
+                <Chip label={area} tone="blue" />
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-      <View style={styles.divider} />
+        <View style={styles.divider} />
 
-      <View style={styles.section}>
-        <SectionLabel>Industries</SectionLabel>
-        <View style={styles.chipRow}>
-          {industries.map(ind => (
-            <View key={ind} style={styles.chipWrap}>
-              <Chip label={ind} tone="neutral" />
-            </View>
-          ))}
+        <View style={styles.section}>
+          <SectionLabel>Industries</SectionLabel>
+          <View style={styles.chipRow}>
+            {industries.map(ind => (
+              <View key={ind} style={styles.chipWrap}>
+                <Chip label={ind} tone="neutral" />
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
+      </PageWrapper>
     </ScreenContainer>
   );
 }

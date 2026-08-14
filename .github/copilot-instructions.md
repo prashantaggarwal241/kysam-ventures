@@ -1,4 +1,4 @@
-# KySam Ventures — React Native App
+# KySam Ventures — Web App
 ## Copilot Repository Instructions
 
 > Place this file at `.github/copilot-instructions.md` in the repo root.
@@ -8,10 +8,13 @@
 
 ## 1. Project summary
 
-Mobile app for **KySam Ventures**, a Delhi-based IT consultancy. Five core screens:
+**Web application** for **KySam Ventures**, a Delhi-based IT consultancy. Five core screens:
 Home, About, Services, Expertise, Contact. Primary goal is lead generation — the
-Contact screen posts enquiries to a backend API. This is v1: keep scope small,
-keep the architecture clean and expandable.
+Contact screen posts enquiries to a backend API.
+
+This is a **web-only** app built with React Native for Web (Expo). It runs in any
+browser and is responsive from mobile-width (375 px) to wide desktop (1440 px+).
+It is NOT distributed as a native iOS/Android app — there are no native builds.
 
 Do not add screens, features, or backend endpoints beyond what's explicitly
 requested. Do not introduce new libraries without asking first.
@@ -22,16 +25,18 @@ requested. Do not introduce new libraries without asking first.
 
 | Layer | Choice |
 |---|---|
-| Framework | React Native (Expo, managed workflow) |
+| Platform | **Web only** — `expo export --platform web` builds a static SPA |
+| Framework | React Native for Web via Expo (managed workflow, SDK 52, `output: 'single'`) |
 | Language | TypeScript, `strict: true` |
-| Navigation | Custom top nav bar (`components/layout/TopNav.tsx`) with an animated sliding underline — NOT bottom tabs. Horizontally scrollable on narrow viewports, never a hamburger menu. |
+| Navigation | Custom top nav bar (`components/layout/TopNav.tsx`) with animated sliding underline — NOT React Navigation tabs. Horizontal ScrollView on narrow (<480 px) viewports, never a hamburger menu. |
+| Layout | `PageWrapper` (`components/layout/PageWrapper.tsx`) centers content at max **1280 px** with `paddingHorizontal: 16`. Full-bleed sections (hero, CTA band) are plain Views that contain a `PageWrapper` for their text. |
 | Animation | `react-native-reanimated` (nav underline, growth chart bars/line, marquee, counters) |
 | Graphics | `react-native-svg` (logo mark, growth chart) |
 | Styling | `StyleSheet.create` + centralized theme tokens (no styled-components, no NativeWind, no inline hex/px) |
 | HTTP | `fetch` wrapped in a single typed API client (no axios unless a real need appears) |
 | Forms | Local component state + a shared validation util (no Formik/RHF for this small a form set) |
-| Fonts | IBM Plex Sans (display/headings, weights 500/600/700), Inter (body, weights 400/500) via `expo-font` |
-| Icons | `@expo/vector-icons` (Tabler-style outline set, or `react-native-vector-icons` if unavailable) |
+| Fonts | IBM Plex Sans (display/headings, weights 600/700), Inter (body, weights 400/500) via `expo-font`; spinner shown while loading |
+| Icons | `@expo/vector-icons` (Ionicons outline set) |
 | Testing | Jest + React Native Testing Library |
 | Linting | ESLint (`@react-native`, `@typescript-eslint`) + Prettier |
 
@@ -39,35 +44,27 @@ requested. Do not introduce new libraries without asking first.
 
 ## 3. Folder structure
 
-Mirrors the backend's "modular monolith" approach from the FRS — organized by
-feature, not by file type, so each screen's logic stays together and nothing
-reaches across boundaries it shouldn't.
-
 ```
+App.tsx                       # Root entry: font loading + ActivityIndicator, registerRootComponent
 src/
-  app/
-    App.tsx                 # entry, providers only
-    RootNavigator.tsx
+  root/
+    App.tsx                   # SafeAreaProvider wrapper
+    RootNavigator.tsx         # → TopNavigator
 
   navigation/
-    TopNav.tsx                 # animated top nav bar, replaces bottom tabs
-    types.ts                   # route param types, no `any`
+    TopNavigator.tsx          # useState<RouteKey> state switcher
+    types.ts                  # RouteKey, ScreenProps
 
   screens/
-    home/
-      HomeScreen.tsx          # composes components only, no business logic
-    about/
-      AboutScreen.tsx
-    services/
-      ServicesScreen.tsx
-    expertise/
-      ExpertiseScreen.tsx
-    contact/
-      ContactScreen.tsx
+    home/HomeScreen.tsx       # dark hero (full-bleed) + floating GrowthChart card + fact cards + counter + Marquee + dark CTA band (full-bleed)
+    about/AboutScreen.tsx     # intro + philosophy pull-quote + 2-col values grid
+    services/ServicesScreen.tsx
+    expertise/ExpertiseScreen.tsx
+    contact/ContactScreen.tsx
 
   features/
     contact/
-      useContactForm.ts       # form state + validation, no UI
+      useContactForm.ts
       contactValidation.ts
       contact.types.ts
     services/
@@ -81,56 +78,53 @@ src/
       IconBadge.tsx
       TextField.tsx
       SectionLabel.tsx
-      Logo.tsx                 # SVG logomark, accepts a size prop
-      GrowthChart.tsx           # animated bar/line chart, accepts data via props
-      Marquee.tsx                # looping horizontal scroll, accepts items via props
+      Logo.tsx                # SVG logomark — 3 bars, 2-circle sun, 2-layer swoosh
+      GrowthChart.tsx         # animated bar/line chart (SVG + Reanimated)
+      Marquee.tsx             # looping horizontal scroll (Reanimated)
     layout/
-      ScreenContainer.tsx     # safe area + background wrapper
-      Footer.tsx                # shown on every screen, not per-screen duplicated
+      TopNav.tsx              # full-width bar; inner row maxWidth 1280 + alignSelf center
+      ScreenContainer.tsx     # ScrollView shell + auto Footer; NO padding (PageWrapper does it)
+      PageWrapper.tsx         # centered max-width wrapper — use this inside every screen
+      Footer.tsx              # full-width border; inner row maxWidth 1280 + alignSelf center
 
   theme/
     colors.ts
     typography.ts
-    spacing.ts
+    spacing.ts                # also exports maxContentWidth = 1280
     radius.ts
-    index.ts                  # single `theme` export, everything above composed here
+    index.ts                  # single `theme` export; also re-exports maxContentWidth
 
   services/
-    apiClient.ts               # one fetch wrapper: base URL, headers, error shape
+    apiClient.ts
     companyApi.ts
     servicesApi.ts
     expertiseApi.ts
     contactApi.ts
 
   hooks/
-    useApi.ts                  # generic loading/error/data hook
+    useApi.ts
 
   types/
-    api.types.ts                # shapes matching the backend FRS (Company, Service, Expertise, Enquiry)
+    api.types.ts
 
   constants/
-    config.ts                   # reads from env, never hardcodes URLs
-
-  assets/
-    fonts/
-    logo/
+    config.ts
+    content.ts                # ALL screen copy — single source of truth
 ```
 
 **Rule of thumb:** if Copilot generates a screen file with a `fetch(...)` call
-or a raw hex color inside it, that's wrong — stop and route it through
-`services/` and `theme/` instead.
+or a raw hex color, that's wrong — route it through `services/` and `theme/`.
+If it adds content padding directly to a screen, that's wrong — use `PageWrapper`.
 
 ---
 
 ## 4. Design tokens
 
-These come directly from the approved mockups and the KySam logo. Define them
-once in `theme/`, never restate the raw values anywhere else in the app.
+### Colors (`theme/colors.ts`)
 
 ```ts
-// theme/colors.ts
 export const colors = {
-  navyHero: '#0A2340',
+  navyHero: '#0A2340',   // hero backgrounds, dark CTA band
   navy: '#0F2A4A',
   navyDeep: '#0F3A66',
   blue: '#1C87C9',
@@ -138,7 +132,7 @@ export const colors = {
   blueLighter: '#7CC3E8',
   blueTintLight: '#CFE3F3',
   blueTint: '#EAF4FC',
-  amber: '#F5A623',
+  amber: '#F5A623',      // primary CTAs, active underline, counter
   amberOuter: '#FFC266',
   amberTint: '#FEF3E2',
   amberTextOnTint: '#8A5A0B',
@@ -155,8 +149,9 @@ export const colors = {
 } as const;
 ```
 
+### Typography (`theme/typography.ts`)
+
 ```ts
-// theme/typography.ts
 export const typography = {
   fontDisplay: 'IBMPlexSans_600SemiBold',
   fontDisplayBold: 'IBMPlexSans_700Bold',
@@ -166,108 +161,147 @@ export const typography = {
 } as const;
 ```
 
-```ts
-// theme/spacing.ts
-export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 18, xxl: 24, xxxl: 32 } as const;
+### Spacing & layout (`theme/spacing.ts`)
 
-// theme/radius.ts
+```ts
+export const spacing = { xs: 4, sm: 8, md: 12, lg: 16, xl: 18, xxl: 24, xxxl: 32 } as const;
+export const maxContentWidth = 1280 as const; // content width cap for all centered sections
+```
+
+### Radius (`theme/radius.ts`)
+
+```ts
 export const radius = { sm: 8, md: 14, lg: 20, pill: 28 } as const;
 ```
 
 Every component in `components/ui` consumes `theme`, never a raw value.
-This is what "standard stylesheet" means in practice: one source of truth,
-every screen inherits it, changing a brand color means editing one file.
 
 ---
 
-## 5. Coding standards — what to instruct Copilot to follow
+## 5. Web layout rules
 
-Paste these as ground rules; Copilot Chat should treat them as non-negotiable
-for this repo.
+### PageWrapper — the single layout primitive
 
-### Separation of concerns / no tight coupling
-- **Screens compose, they don't fetch or calculate.** A screen file imports
-  components and a hook, renders them, and does nothing else.
-- **No business logic in `components/ui`.** Those components take props and
-  render — they don't know what a "service" or "enquiry" is.
-- **No direct `fetch`/`axios` calls outside `services/`.** Every API call is a
-  named function in `services/*Api.ts` with a typed return, imported by hooks
-  or screens — never inlined.
-- **Validation lives in `features/*/*.validation.ts`**, not inside JSX or
-  inline handlers.
-- **Navigation types are centralized** in `navigation/types.ts` — no
-  stringly-typed route names scattered across screens.
+```tsx
+// Every screen wraps its content:
+<ScreenContainer>
+  <PageWrapper>
+    {/* content here */}
+  </PageWrapper>
+</ScreenContainer>
+```
+
+`PageWrapper` provides `maxWidth: 1280, alignSelf: 'center', paddingHorizontal: 16`.
+`ScreenContainer` has **no padding** — it is purely a scroll shell.
+
+### Full-bleed sections (hero, CTA band)
+
+Full-bleed sections must NOT be inside the PageWrapper — they go directly inside
+`ScreenContainer` so their background extends edge-to-edge. Their text content
+uses a PageWrapper internally:
+
+```tsx
+{/* Full-bleed dark hero */}
+<View style={styles.hero}>          {/* backgroundColor extends full width */}
+  <PageWrapper style={styles.heroContent}>
+    <Text style={styles.heading}>...</Text>
+  </PageWrapper>
+</View>
+```
+
+Never use `marginHorizontal: -theme.spacing.lg` to escape padding — that was
+the old mobile-only approach. Full-bleed is achieved by placing the View outside
+any padded container.
+
+### Responsive breakpoints
+
+| Breakpoint | Behavior |
+|---|---|
+| < 480 px | TopNav items in horizontal ScrollView |
+| 480 px – 1280 px | TopNav items inline; content fills width |
+| > 1280 px | Content capped at 1280 px and centered; nav bar background extends full width |
+
+---
+
+## 6. Coding standards
+
+### Separation of concerns
+- Screens compose, they don't fetch or calculate.
+- `components/ui` takes props and renders — no domain knowledge.
+- No direct `fetch` outside `services/`.
+- Validation in `features/*/validation.ts`, not inline.
+- Navigation types centralized in `navigation/types.ts`.
 
 ### TypeScript
 - `strict: true`, no `any`, no implicit `any`.
-- Every component has an explicit `Props` interface, named `<Component>Props`.
-- Shared API/domain shapes live in `types/api.types.ts` and mirror the backend
-  FRS exactly (`Company`, `Service`, `Expertise`, `Enquiry`, `EnquiryStatus`).
-- Prefer `type` for unions/aliases, `interface` for object shapes/props.
+- Every component has an explicit `<Component>Props` interface.
+- Prefer `type` for unions/aliases, `interface` for object shapes.
 
 ### Styling
-- `StyleSheet.create` at the bottom of each component file.
-- No magic numbers for color, spacing, or radius — import from `theme/`.
-- No inline style objects except for truly dynamic, per-render values
-  (e.g. an animated width) — and even those should reference theme tokens
-  for color/spacing.
+- `StyleSheet.create` at the bottom of each file.
+- No magic numbers — import from `theme/`.
+- No inline style objects except for truly dynamic per-render values.
+- `maxContentWidth` from `theme` — never hardcode `1280` in a component.
 
 ### Naming
-- Components: `PascalCase.tsx`, filename matches the exported component.
+- Components: `PascalCase.tsx`.
 - Hooks: `useCamelCase.ts`.
-- Non-component modules (services, utils, validation): `camelCase.ts`.
-- Types/interfaces: `PascalCase`, no `I` prefix (`Service`, not `IService`).
+- Non-component modules: `camelCase.ts`.
+- Types/interfaces: `PascalCase`, no `I` prefix.
 
 ### Config & secrets
-- All environment-specific values (API base URL, keys) come from `.env` via
-  `expo-constants` / `app.config.ts` — never hardcoded, never committed.
-- `constants/config.ts` is the only file that reads `process.env` /
-  `Constants.expoConfig.extra` — everything else imports from there.
+- All env values come from `.env` via `app.config.ts` — never hardcoded.
+- `constants/config.ts` is the only file that reads env — everything else imports from there.
 
 ### Error handling
-- API errors return a consistent shape (`{ success: false, message }`, matching
-  the backend's error contract in the FRS) — never let a raw exception reach
-  the UI. Screens show a friendly message, not `error.toString()`.
+- API errors use a consistent shape (`{ success: false, message }`).
+- Screens show friendly messages, not `error.toString()`.
 
 ### Testing
-- Every component in `components/ui` gets a render test.
-- `useContactForm` and `contactValidation` get unit tests, including invalid
-  email, empty required fields, and message length limits.
+- Every `components/ui` component has a render test.
+- `useContactForm` and `contactValidation` have unit tests.
 
 ### Accessibility
 - Every touchable has `accessibilityLabel` and `accessibilityRole`.
-- Form fields have associated labels, not just placeholder text.
-- Color contrast follows the theme as designed — don't lighten text colors
-  for "polish" without checking contrast.
+- Form fields have associated labels.
+- Do not lighten text colors without checking contrast.
 
-### Git / PR hygiene
+### Git hygiene
 - Conventional commits (`feat:`, `fix:`, `refactor:`, `chore:`).
-- One feature/screen per branch and PR where practical.
-- No commented-out code, no console.log left in committed code.
+- No commented-out code, no `console.log` in committed code.
 
 ---
 
-## 6. Build order (suggested prompts to give Copilot, in sequence)
+## 7. Running & deploying
 
-1. "Scaffold the Expo + TypeScript project with the folder structure and
-   theme tokens from `.github/copilot-instructions.md`, no screens yet." ✅
-2. "Build the `components/ui` kit: Button, Card, Chip, IconBadge, TextField,
-   SectionLabel — theme-driven, no business logic, with render tests." ✅
-3. "Build `services/apiClient.ts` and the typed `*Api.ts` modules for
-   company, services, expertise, and contact endpoints, matching the FRS
-   error/response shapes. Not called from any screen yet — inert scaffolding
-   for Phase 2." ✅
-4. "Build the navigation shell and populate all 5 screens with static
-   content from `constants/content.ts`." ✅ (superseded by step 5 below —
-   nav pattern changed from bottom tabs to top nav after this step)
-5. Rebuild navigation as the animated `TopNav` (section 2/3 above) and
-   rebuild Home/About to the approved design: dark hero with a `K`
-   watermark, `GrowthChart`, live counter, `Marquee`, philosophy pull-quote,
-   `Footer`. IBM Plex Sans replaces Space Grotesk throughout. — *current
-   step*
-6. Services, Expertise, Contact screens brought in line with the same
-   visual language (dark featured-service card, pull-quote styling
-   patterns, etc.) if not already consistent after step 5.
+```bash
+# Dev (opens browser at localhost:8081)
+npm start
 
-Building the UI kit and API layer before any screen is what prevents the
-tight coupling — screens are wired against contracts that already exist.
+# Production build → dist/ (static SPA)
+npm run build
+
+# Type check
+npm run typecheck
+
+# Docker (multi-stage: Node build → nginx serve)
+docker build -t kysam-ventures .
+docker run -p 80:80 kysam-ventures
+```
+
+The `Dockerfile` at the repo root builds the SPA and serves it with nginx.
+All paths fall back to `index.html` for client-side routing.
+
+---
+
+## 8. Build order (history + current state)
+
+| Step | Status | Description |
+|---|---|---|
+| 1 | ✅ Done | Scaffold Expo + TypeScript + theme tokens |
+| 2 | ✅ Done | `components/ui` kit: Button, Card, Chip, IconBadge, TextField, SectionLabel |
+| 3 | ✅ Done | `services/` API layer + typed `*Api.ts` modules (inert scaffolding) |
+| 4 | ✅ Done | Navigation shell + 5 screens with static content |
+| 5 | ✅ Done | Animated `TopNav`, Logo SVG, GrowthChart, Marquee, Footer; Home + About rebuilt |
+| 6 | ✅ Done | Web-only adaptation: PageWrapper layout system, maxContentWidth, removed native deps |
+| 7 | Next | Services/Expertise/Contact visual polish; wire Contact form to live API |

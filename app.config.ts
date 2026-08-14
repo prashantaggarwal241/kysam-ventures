@@ -5,18 +5,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   name: 'KySam Ventures',
   slug: 'kysam-ventures',
   version: '1.0.0',
-  orientation: 'portrait',
-  userInterfaceStyle: 'light',
-  ios: {
-    supportsTablet: true,
-    bundleIdentifier: 'com.kysamventures.app',
-  },
-  android: {
-    package: 'com.kysamventures.app',
-    adaptiveIcon: {
-      backgroundColor: '#0F2A4A',
-    },
-  },
   web: {
     bundler: 'metro',
     output: 'single',

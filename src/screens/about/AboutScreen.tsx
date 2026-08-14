@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
+import PageWrapper from '../../components/layout/PageWrapper';
 import SectionLabel from '../../components/ui/SectionLabel';
 import { aboutContent, coreValues } from '../../constants/content';
 import { theme } from '../../theme';
@@ -10,31 +11,33 @@ export type AboutScreenProps = ScreenProps;
 export default function AboutScreen(_: AboutScreenProps) {
   return (
     <ScreenContainer>
-      {/* Intro */}
-      <View style={styles.section}>
-        <SectionLabel>{aboutContent.eyebrow}</SectionLabel>
-        <Text style={styles.heading}>{aboutContent.heading}</Text>
-        <Text style={styles.intro}>{aboutContent.intro}</Text>
-      </View>
-
-      {/* Philosophy pull-quote */}
-      <View style={styles.pullQuoteBlock}>
-        <View style={styles.pullQuoteBorder} />
-        <Text style={styles.pullQuoteText}>{aboutContent.philosophy}</Text>
-      </View>
-
-      {/* Core values grid */}
-      <View style={styles.valuesSection}>
-        <SectionLabel>Our Values</SectionLabel>
-        <View style={styles.valuesGrid}>
-          {coreValues.map(value => (
-            <View key={value} style={styles.valueCard}>
-              <View style={styles.valueAccent} />
-              <Text style={styles.valueText}>{value}</Text>
-            </View>
-          ))}
+      <PageWrapper>
+        {/* Intro */}
+        <View style={styles.section}>
+          <SectionLabel>{aboutContent.eyebrow}</SectionLabel>
+          <Text style={styles.heading}>{aboutContent.heading}</Text>
+          <Text style={styles.intro}>{aboutContent.intro}</Text>
         </View>
-      </View>
+
+        {/* Philosophy pull-quote */}
+        <View style={styles.pullQuoteBlock}>
+          <View style={styles.pullQuoteBorder} />
+          <Text style={styles.pullQuoteText}>{aboutContent.philosophy}</Text>
+        </View>
+
+        {/* Core values grid */}
+        <View style={styles.valuesSection}>
+          <SectionLabel>Our Values</SectionLabel>
+          <View style={styles.valuesGrid}>
+            {coreValues.map(value => (
+              <View key={value} style={styles.valueCard}>
+                <View style={styles.valueAccent} />
+                <Text style={styles.valueText}>{value}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </PageWrapper>
     </ScreenContainer>
   );
 }

@@ -1,26 +1,34 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../../theme';
+import { theme, maxContentWidth } from '../../theme';
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <View style={styles.footer}>
-      <Text style={styles.left}>© {year} KySam Ventures</Text>
-      <Text style={styles.right}>Build · Grow · Create value</Text>
+    <View style={styles.outer}>
+      <View style={styles.inner}>
+        <Text style={styles.left}>© {year} KySam Ventures</Text>
+        <Text style={styles.right}>Build · Grow · Create value</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  footer: {
+  outer: {
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+    backgroundColor: theme.colors.background,
+  },
+  inner: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: theme.spacing.lg,
-    marginTop: theme.spacing.xxl,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.border,
+    paddingHorizontal: theme.spacing.lg,
+    width: '100%',
+    maxWidth: maxContentWidth,
+    alignSelf: 'center',
   },
   left: {
     fontFamily: theme.typography.fontBody,

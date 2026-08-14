@@ -1,6 +1,7 @@
-# KySam Ventures — Mobile App
+# KySam Ventures — Web App
 
-Official React Native mobile app for **KySam Ventures**, a Delhi-based IT consultancy.  
+Official web application for **KySam Ventures**, a Delhi-based IT consultancy.  
+Built with React Native for Web (Expo) so it renders in any browser and is fully responsive — from mobile browsers to wide desktop screens.  
 Five screens (Home, About, Services, Expertise, Contact) focused on lead generation and brand presence.
 
 ---
@@ -36,10 +37,11 @@ Five screens (Home, About, Services, Expertise, Contact) focused on lead generat
 
 | Item | Detail |
 |---|---|
-| Framework | React Native via Expo (managed workflow, SDK 52) |
+| Platform | Web (runs in any browser; responsive on mobile browsers and desktop) |
+| Framework | React Native for Web via Expo (managed workflow, SDK 52, `output: 'single'`) |
 | Language | TypeScript — `strict: true`, no `any` |
-| Navigation | Custom animated top nav bar (no bottom tabs) |
-| Styling | `StyleSheet.create` + centralized theme tokens |
+| Navigation | Custom animated top nav bar (pure state machine, no React Navigation) |
+| Styling | `StyleSheet.create` + centralized theme tokens; `PageWrapper` centers content at max 1280 px |
 | Animation | `react-native-reanimated` v3 |
 | SVG graphics | `react-native-svg` |
 | Fonts | IBM Plex Sans (headings) + Inter (body) via `expo-font` |
@@ -54,8 +56,6 @@ Five screens (Home, About, Services, Expertise, Contact) focused on lead generat
 ### Prerequisites
 
 - Node.js 18+ and npm
-- Expo CLI: `npm install -g expo-cli` (or use `npx expo`)
-- For native device testing: Expo Go app (iOS/Android) or a simulator
 
 ### Install dependencies
 
@@ -66,18 +66,21 @@ npm install
 ### Start the development server
 
 ```bash
-# Interactive Expo dev server (scan QR with Expo Go)
-npx expo start
-
-# Web browser (Expo for Web)
+# Start in a browser (primary workflow)
+npm start
+# or
 npx expo start --web
-
-# Android emulator
-npx expo start --android
-
-# iOS simulator (macOS only)
-npx expo start --ios
 ```
+
+The app opens at `http://localhost:8081` (or the next available port).
+
+### Build for production
+
+```bash
+npm run build
+```
+
+Outputs a static single-page app to `dist/`. Upload `dist/` to any static host (GitHub Pages, Netlify, Vercel, etc.).
 
 ---
 
@@ -114,9 +117,10 @@ kysam-ventures/
 │   │   │   ├── SectionLabel.tsx
 │   │   │   └── TextField.tsx
 │   │   └── layout/
-│   │       ├── TopNav.tsx          # Animated top navigation bar
-│   │       ├── ScreenContainer.tsx # Safe-area wrapper + Footer auto-append
-│   │       └── Footer.tsx
+│   │       ├── TopNav.tsx          # Animated top navigation bar (content centered at maxContentWidth)
+│   │       ├── ScreenContainer.tsx # ScrollView shell + Footer auto-append
+│   │       ├── PageWrapper.tsx     # Centered max-width content wrapper (1280 px cap)
+│   │       └── Footer.tsx          # Full-width border, content centered at maxContentWidth
 │   │
 │   ├── theme/
 │   │   ├── colors.ts
@@ -239,6 +243,8 @@ Font sizes (`typography.size`):
 `spacing` tokens: `xs(4)` · `sm(8)` · `md(12)` · `lg(16)` · `xl(18)` · `xxl(24)` · `xxxl(32)`
 
 `radius` tokens: `sm(8)` · `md(14)` · `lg(20)` · `pill(28)`
+
+`maxContentWidth`: `1280` — imported from `theme` and used by `TopNav`, `PageWrapper`, and `Footer` to cap content width on wide screens.
 
 ---
 
@@ -426,12 +432,10 @@ const COUNTER_DURATION_MS = 700;
 
 | Command | What it does |
 |---|---|
-| `npx expo start` | Opens the Expo dev server; scan QR with Expo Go |
-| `npx expo start --web` | Runs in browser via Expo for Web |
-| `npx expo start --android` | Opens in Android emulator |
-| `npx expo start --ios` | Opens in iOS simulator (macOS only) |
+| `npm start` | Dev server — opens the app in your browser |
+| `npm run build` | Production bundle → `dist/` (static SPA, ready to deploy) |
 | `npm run lint` | ESLint check |
-| `npm run typecheck` | TypeScript type check (no emit) |
+| `npm run typecheck` | TypeScript type check (zero errors expected) |
 
 ---
 
@@ -462,13 +466,10 @@ All licenses are **MIT** unless noted.
 | `react-native` | 0.76.3 | MIT | Native mobile framework |
 | `react-native-reanimated` | ~3.16.1 | MIT | 60fps animations (nav underline, chart, marquee) |
 | `react-native-svg` | 15.8.0 | MIT | SVG rendering (Logo, GrowthChart) |
-| `react-native-safe-area-context` | 4.12.0 | MIT | Status bar / notch inset handling |
-| `react-native-screens` | ~4.1.0 | MIT | Native navigation screen primitives |
+| `react-native-safe-area-context` | 4.12.0 | MIT | Safe area inset API (insets are always 0 on web) |
 | `react-native-web` | ~0.19.13 | MIT | Renders React Native components in a browser |
-| `expo-font` | ~13.0.0 | MIT | Custom font loading with splash-screen integration |
+| `expo-font` | ~13.0.0 | MIT | Custom font loading (shows spinner until ready) |
 | `expo-constants` | ~17.0.0 | MIT | Access to `app.json` / `app.config.ts` values |
-| `expo-splash-screen` | ~0.29.0 | MIT | Keeps splash screen visible until fonts load |
-| `expo-status-bar` | ~2.0.0 | MIT | Status bar style control |
 | `@expo/vector-icons` | ^14.0.0 | MIT | Icon sets (Ionicons used throughout) |
 | `@expo/metro-runtime` | ~4.0.1 | MIT | Metro bundler runtime for Expo web |
 | `@expo-google-fonts/ibm-plex-sans` | ^0.4.1 | MIT + OFL-1.1* | IBM Plex Sans font family (display/heading type) |

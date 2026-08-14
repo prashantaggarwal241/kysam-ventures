@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
+import PageWrapper from '../../components/layout/PageWrapper';
 import Card from '../../components/ui/Card';
 import IconBadge from '../../components/ui/IconBadge';
 import { services } from '../../constants/content';
@@ -11,17 +12,19 @@ export type ServicesScreenProps = ScreenProps;
 export default function ServicesScreen(_: ServicesScreenProps) {
   return (
     <ScreenContainer>
-      {services.map(service => (
-        <Card key={service.slug} variant="surface" style={styles.card}>
-          <View style={styles.row}>
-            <IconBadge iconName={service.icon} tone="blue" size="md" />
-            <View style={styles.textBlock}>
-              <Text style={styles.name}>{service.name}</Text>
-              <Text style={styles.desc}>{service.shortDescription}</Text>
+      <PageWrapper>
+        {services.map(service => (
+          <Card key={service.slug} variant="surface" style={styles.card}>
+            <View style={styles.row}>
+              <IconBadge iconName={service.icon} tone="blue" size="md" />
+              <View style={styles.textBlock}>
+                <Text style={styles.name}>{service.name}</Text>
+                <Text style={styles.desc}>{service.shortDescription}</Text>
+              </View>
             </View>
-          </View>
-        </Card>
-      ))}
+          </Card>
+        ))}
+      </PageWrapper>
     </ScreenContainer>
   );
 }

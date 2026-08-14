@@ -1,6 +1,5 @@
 import { registerRootComponent } from 'expo';
-import { useCallback } from 'react';
-import { Platform, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import {
   useFonts,
   IBMPlexSans_500Medium,
@@ -8,12 +7,7 @@ import {
   IBMPlexSans_700Bold,
 } from '@expo-google-fonts/ibm-plex-sans';
 import { Inter_400Regular, Inter_500Medium } from '@expo-google-fonts/inter';
-import * as SplashScreen from 'expo-splash-screen';
 import SrcApp from './src/root/App';
-
-if (Platform.OS !== 'web') {
-  SplashScreen.preventAutoHideAsync();
-}
 
 function App() {
   const [fontsLoaded, fontError] = useFonts({
@@ -24,21 +18,15 @@ function App() {
     Inter_500Medium,
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (Platform.OS !== 'web' && !fontsLoaded && !fontError) {
-    return null;
+  if (!fontsLoaded && !fontError) {
+    return (
+      <View style={{ flex: 1, backgroundColor: '#0A2340', justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#F5A623" />
+      </View>
+    );
   }
 
-  return (
-    <View style={{ flex: 1 }} onLayout={Platform.OS !== 'web' ? onLayoutRootView : undefined}>
-      <SrcApp />
-    </View>
-  );
+  return <SrcApp />;
 }
 
 registerRootComponent(App);

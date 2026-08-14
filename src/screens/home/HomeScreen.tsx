@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
+import PageWrapper from '../../components/layout/PageWrapper';
 import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
 import SectionLabel from '../../components/ui/SectionLabel';
@@ -37,38 +38,36 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
 
   return (
     <ScreenContainer>
-      {/* ── Hero ────────────────────────────────────────────────────── */}
+
+      {/* ── Hero — full-bleed dark band ──────────────────────────────── */}
       <View style={styles.hero}>
-        {/* "K" watermark — low-contrast, purely decorative */}
+        {/* "K" watermark — decorative, absolute-positioned within hero */}
         <Text style={styles.kWatermark} accessibilityElementsHidden>K</Text>
+        <PageWrapper style={styles.heroContent}>
+          <Text style={styles.eyebrow}>{homeContent.eyebrow}</Text>
+          <Text style={styles.heading}>{homeContent.heading}</Text>
+          <Text style={styles.subtext}>{homeContent.subtext}</Text>
+          <View style={styles.ctaRow}>
+            <Button label="Get in touch" onPress={() => navigate('Contact')} />
+            <Button
+              label="Our services"
+              variant="secondary"
+              onPress={() => navigate('Services')}
+            />
+          </View>
+        </PageWrapper>
+      </View>
 
-        <Text style={styles.eyebrow}>{homeContent.eyebrow}</Text>
-        <Text style={styles.heading}>{homeContent.heading}</Text>
-        <Text style={styles.subtext}>{homeContent.subtext}</Text>
+      {/* ── Content — floating chart card + light section ─────────────── */}
+      <PageWrapper style={styles.contentSection}>
 
-        <View style={styles.ctaRow}>
-          <Button
-            label="Get in touch"
-            onPress={() => navigate('Contact')}
-          />
-          <Button
-            label="Our services"
-            variant="secondary"
-            onPress={() => navigate('Services')}
-          />
+        {/* Floating Growth Chart card — overlaps the hero bottom */}
+        <View style={styles.growthCardWrap}>
+          <Card variant="surface" style={styles.growthCard}>
+            <SectionLabel>Growth trajectory</SectionLabel>
+            <GrowthChart />
+          </Card>
         </View>
-      </View>
-
-      {/* ── Floating Growth Chart card ───────────────────────────────── */}
-      <View style={styles.growthCardWrap}>
-        <Card variant="surface" style={styles.growthCard}>
-          <SectionLabel>Growth trajectory</SectionLabel>
-          <GrowthChart />
-        </Card>
-      </View>
-
-      {/* ── Light section ───────────────────────────────────────────── */}
-      <View style={styles.lightSection}>
 
         {/* Fact cards */}
         <ScrollView
@@ -95,39 +94,37 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
           <SectionLabel>What we do</SectionLabel>
           <Marquee items={SERVICE_NAMES} />
         </View>
-      </View>
 
-      {/* ── Dark CTA band ──────────────────────────────────────────── */}
+      </PageWrapper>
+
+      {/* ── Dark CTA band — full-bleed ───────────────────────────────── */}
       <View style={styles.ctaBand}>
-        <Text style={styles.ctaBandHeading}>
-          Have a technology challenge or a new idea?
-        </Text>
-        <Button
-          label="Let's talk"
-          onPress={() => navigate('Contact')}
-          variant="primary"
-        />
+        <PageWrapper style={styles.ctaBandContent}>
+          <Text style={styles.ctaBandHeading}>
+            Have a technology challenge or a new idea?
+          </Text>
+          <Button
+            label="Let's talk"
+            onPress={() => navigate('Contact')}
+            variant="primary"
+          />
+        </PageWrapper>
       </View>
 
     </ScreenContainer>
   );
 }
 
-const HERO_PADDING_H = theme.spacing.xxl;
-const HERO_EXTRA_BOTTOM = 48; // space for the floating chart card
+const HERO_EXTRA_BOTTOM = 56; // extra space at hero bottom for the floating card overlap
 
 const styles = StyleSheet.create({
-  // ── Hero ────────────────────────────────────────
+
+  // ── Hero ──────────────────────────────────────────────────
   hero: {
-    // Escape the ScreenContainer's padding to go full-bleed
-    marginHorizontal: -theme.spacing.lg,
-    marginTop: -theme.spacing.lg,
     backgroundColor: theme.colors.navyHero,
-    paddingHorizontal: HERO_PADDING_H,
     paddingTop: theme.spacing.xxxl,
     paddingBottom: theme.spacing.xxxl + HERO_EXTRA_BOTTOM,
     overflow: 'hidden',
-    gap: theme.spacing.md,
   },
   kWatermark: {
     position: 'absolute',
@@ -135,7 +132,12 @@ const styles = StyleSheet.create({
     top: -24,
     fontFamily: theme.typography.fontDisplayBold,
     fontSize: 160,
-    color: theme.colors.navy, // purposely low-contrast on navyHero background
+    color: theme.colors.navy,
+  },
+  heroContent: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    gap: theme.spacing.md,
   },
   eyebrow: {
     fontFamily: theme.typography.fontBodyMedium,
@@ -164,14 +166,18 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
 
-  // ── Floating growth chart card ─────────────────
+  // ── Content section ────────────────────────────────────────
+  contentSection: {
+    paddingTop: 0, // growthCardWrap negative marginTop creates the hero overlap
+    gap: theme.spacing.xxl,
+  },
+
+  // ── Floating growth chart card ─────────────────────────────
   growthCardWrap: {
-    marginTop: -HERO_EXTRA_BOTTOM + theme.spacing.md,
-    marginBottom: theme.spacing.xxl,
+    marginTop: -HERO_EXTRA_BOTTOM,
     zIndex: 10,
   },
   growthCard: {
-    // Card variant="surface" already provides white bg + border
     elevation: 6,
     shadowColor: theme.colors.navyHero,
     shadowOffset: { width: 0, height: 4 },
@@ -180,11 +186,7 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
 
-  // ── Light section ──────────────────────────────
-  lightSection: {
-    gap: theme.spacing.xxl,
-    marginBottom: theme.spacing.xxl,
-  },
+  // ── Facts ──────────────────────────────────────────────────
   factRow: {
     gap: theme.spacing.md,
     paddingVertical: theme.spacing.xs,
@@ -204,6 +206,8 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.size.small,
     color: theme.colors.textSecondary,
   },
+
+  // ── Counter ────────────────────────────────────────────────
   counterRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -221,16 +225,19 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     lineHeight: theme.typography.size.body * 1.5,
   },
+
+  // ── Marquee ────────────────────────────────────────────────
   marqueeSection: {
     gap: theme.spacing.sm,
   },
 
-  // ── Dark CTA band ──────────────────────────────
+  // ── Dark CTA band ──────────────────────────────────────────
   ctaBand: {
-    marginHorizontal: -theme.spacing.lg,
     backgroundColor: theme.colors.navyHero,
-    paddingHorizontal: HERO_PADDING_H,
-    paddingVertical: theme.spacing.xxxl,
+  },
+  ctaBandContent: {
+    paddingTop: theme.spacing.xxxl,
+    paddingBottom: theme.spacing.xxxl,
     alignItems: 'flex-start',
     gap: theme.spacing.xl,
   },
