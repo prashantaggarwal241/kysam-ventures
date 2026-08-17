@@ -137,15 +137,6 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
           </View>
         )}
 
-        {/* Contact pill */}
-        <TouchableOpacity
-          style={styles.letsTalkBtn}
-          onPress={() => onNavigate('Contact')}
-          accessibilityRole="button"
-          accessibilityLabel="Contact us"
-        >
-          <Text style={styles.letsTalkText}>Contact us</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -222,17 +213,5 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: theme.colors.amber,
     borderRadius: 1,
-  },
-  letsTalkBtn: {
-    flexShrink: 0,
-    backgroundColor: theme.colors.amber,
-    paddingVertical: theme.spacing.xs + 2,
-    paddingHorizontal: theme.spacing.md,
-    borderRadius: theme.radius.pill,
-  },
-  letsTalkText: {
-    fontFamily: theme.typography.fontBodyMedium,
-    fontSize: theme.typography.size.small,
-    color: theme.colors.amberTextOnFill,
   },
 });
