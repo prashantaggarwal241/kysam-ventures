@@ -13,6 +13,8 @@ export type ExpertiseScreenProps = ScreenProps;
 export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
   const winWidth = useWindowWidth();
   const isDesktop = winWidth >= 1024;
+  const heroFontSize = winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52;
+  const sectionFontSize = winWidth < 600 ? 24 : 32;
 
   return (
     <ScreenContainer navigate={navigate}>
@@ -28,14 +30,14 @@ export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
           <AnimatedSection delay={80}>
             <Text style={[
               styles.heroHeading,
-              { fontSize: winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52 },
+              { fontSize: heroFontSize, lineHeight: heroFontSize * 1.2 },
             ]}>
               AFC expertise.{'\n'}Enterprise delivery.
             </Text>
           </AnimatedSection>
           <AnimatedSection delay={160}>
             <Text style={styles.heroSubtext}>
-              Deep technical capability in Automatic Fare Collection, smart mobility, and enterprise software — proven through delivery for Aurionpro and Sileo.
+              Technical depth across AFC, transit systems, enterprise software, and government digitisation — proven through delivery for Aurionpro, Sileo, and Jal Kal Prayagraj.
             </Text>
           </AnimatedSection>
         </PageWrapper>
@@ -49,7 +51,7 @@ export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
             <Text style={styles.sectionEyebrow}>TECHNICAL EXPERTISE</Text>
             <Text style={[
               styles.sectionHeading,
-              { fontSize: winWidth < 600 ? 24 : 32 },
+              { fontSize: sectionFontSize, lineHeight: sectionFontSize * 1.25 },
             ]}>
               Eight technology domains,{'\n'}led by AFC & transit.
             </Text>
@@ -81,7 +83,7 @@ export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
             <Text style={styles.industriesEyebrow}>INDUSTRIES SERVED</Text>
             <Text style={[
               styles.industriesHeading,
-              { fontSize: winWidth < 600 ? 24 : 32 },
+              { fontSize: sectionFontSize, lineHeight: sectionFontSize * 1.25 },
             ]}>
               Sectors we understand.
             </Text>
@@ -103,7 +105,7 @@ export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
             <View style={styles.industriesNote}>
               <View style={styles.industriesNoteRule} />
               <Text style={styles.industriesNoteText}>
-                Our team brings direct delivery and advisory experience in these sectors — including live AFC deployments for major Indian transit authorities via Aurionpro and Sileo.
+                Our team brings direct delivery experience across these sectors — including live AFC deployments via Aurionpro and Sileo, and record digitisation for public-sector bodies such as Jal Kal Prayagraj.
               </Text>
             </View>
           </AnimatedSection>
@@ -147,7 +149,6 @@ const styles = StyleSheet.create({
   heroHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.2 * 52,
   },
   heroSubtext: {
     fontFamily: theme.typography.fontBody,
@@ -177,7 +178,6 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textPrimary,
-    lineHeight: 1.25 * 32,
   },
 
   expertiseGrid: {
@@ -244,7 +244,6 @@ const styles = StyleSheet.create({
   industriesHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.25 * 32,
   },
 
   industriesGrid: {

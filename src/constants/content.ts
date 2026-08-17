@@ -21,14 +21,15 @@ export interface ClientContent {
   name: string;
   description: string;
   sector: string;
+  website: string;
 }
 
 // ── Home ──────────────────────────────────────────────────────────────────
 export const homeContent = {
-  eyebrow: 'AFC SPECIALIST · DELIVERY PARTNER · ENTERPRISE SOFTWARE',
-  heading: 'Technology\nDelivery.\nBusiness\noutcomes.',
+  eyebrow: 'IT SERVICES · DELIVERY PARTNER · TRANSIT TECHNOLOGY',
+  heading: 'Technology\nDelivery.\nBusiness\nOutcomes.',
   subtext:
-    'Expert IT services and delivery partner for Automatic Fare Collection systems, enterprise software, and smart mobility solutions — trusted by Aurionpro Solutions and Sileo.',
+    'Specialist technology services for Automatic Fare Collection systems, enterprise software, and smart mobility — trusted by Aurionpro Solutions and Sileo as a long-term delivery partner.',
   factCards: [
     { stat: 'AFC Systems', label: 'End-to-end Automatic Fare Collection delivery' },
     { stat: 'Product Company Partner', label: 'Trusted vendor for Aurionpro & Sileo' },
@@ -47,14 +48,23 @@ export const clients: ClientContent[] = [
   {
     name: 'Aurionpro Solutions',
     description:
-      'BSE-listed global technology product company. KySam delivers AFC system development, integration, and application support for Aurionpro transit platforms deployed across major Indian cities.',
+      'BSE-listed global technology product company. KySam delivers software development, systems integration, and application support for Aurionpro transit and smart mobility platforms deployed across major Indian cities.',
     sector: 'Transit & Fare Technology',
+    website: 'https://www.aurionpro.com',
   },
   {
     name: 'Sileo',
     description:
       'Smart mobility and transport technology platform. KySam provides software development and systems integration services for the Sileo application suite.',
     sector: 'Smart Mobility',
+    website: '',
+  },
+  {
+    name: 'Jal Kal Prayagraj',
+    description:
+      'Municipal water authority of Prayagraj. KySam executed a comprehensive record digitisation programme — converting large volumes of legacy physical records into structured digital formats to improve data access and operational efficiency for the authority.',
+    sector: 'Government & Municipal Services',
+    website: '',
   },
 ];
 
@@ -64,7 +74,7 @@ export const services: ServiceContent[] = [
     slug: 'afc-system-development',
     name: 'AFC System Development',
     shortDescription:
-      'End-to-end Automatic Fare Collection system development, customisation, and integration for transit authorities and product companies.',
+      'End-to-end AFC system development, customisation, and integration for transit authorities and product companies.',
     icon: 'git-network-outline',
   },
   {
@@ -119,6 +129,7 @@ export const expertiseAreas: string[] = [
 export const industries: string[] = [
   'Public Transit & Urban Mobility',
   'Smart City Solutions',
+  'Government & Municipal Services',
   'Financial Services & Payments',
   'Enterprise Software',
   'Logistics & Supply Chain',
@@ -128,11 +139,11 @@ export const industries: string[] = [
 export const aboutContent = {
   eyebrow: 'FOUNDED · DELHI, INDIA',
   heading: 'Your Technology\nDelivery Partner',
-  body: 'KySam Ventures is an IT service delivery company with deep expertise in Automatic Fare Collection (AFC) systems and enterprise software. We operate as a trusted technology vendor for Aurionpro Solutions and Sileo — delivering software development, QA, systems integration, and managed support services to power transit and enterprise technology platforms.',
+  body: 'KySam Ventures is an IT services company with deep domain expertise in Automatic Fare Collection (AFC) systems, enterprise software, and government technology. We work as a delivery partner for Aurionpro Solutions and Sileo, and as a specialist technology vendor for public-sector organisations such as Jal Kal Prayagraj — building, integrating, and supporting systems that power transit infrastructure and public services across India.',
   intro:
-    'Our team comprises qualified engineers and technology professionals with direct delivery experience on AFC systems, transit technology, and enterprise platforms. We serve as a vendor and delivery partner for Aurionpro Solutions — a BSE-listed, globally recognised product company — and Sileo, delivering mission-critical fare collection and transport technology solutions.',
+    'Our engineering team brings hands-on delivery experience across AFC systems, transit technology, enterprise platforms, and government digitisation. We serve Aurionpro Solutions — a BSE-listed, globally recognised product company — and Sileo, alongside public-sector bodies such as Jal Kal Prayagraj, for whom we delivered a comprehensive record digitisation programme.',
   philosophy:
-    'We partner with product companies as long-term vendors — owning delivery quality, meeting SLAs, and scaling teams precisely when our clients need it.',
+    'We partner with product companies and public organisations as long-term vendors — owning delivery quality, meeting SLAs, and scaling teams precisely when our clients need it.',
 } as const;
 
 export const coreValues: string[] = [
@@ -147,7 +158,7 @@ export const coreValues: string[] = [
 // ── Contact ───────────────────────────────────────────────────────────────
 export const contactContent = {
   email: 'contact@kysamventures.com',
-  location: 'Delhi, India',
+  locations: ['Delhi', 'Noida'] as string[],
 } as const;
 
 // Marquee items used on home
@@ -158,6 +169,6 @@ export const SERVICE_TICKER = [
   'Systems Integration',
   'Managed Support',
   'Technology Consulting',
-  'Aurionpro Partner',
-  'Sileo Partner',
+  'Record Digitisation',
+  'Government Technology',
 ];

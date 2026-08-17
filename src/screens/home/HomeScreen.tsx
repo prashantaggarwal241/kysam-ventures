@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Animated, {
   Easing,
   interpolateColor,
@@ -99,6 +99,7 @@ function ServiceRow({ index, service }: ServiceRowProps) {
 
 // ── Client trust card ─────────────────────────────────────────────────────
 function ClientCard({ client, delay }: { client: typeof clients[0]; delay: number }) {
+  const handleVisit = () => { void Linking.openURL(client.website); };
   return (
     <AnimatedSection delay={delay} style={styles.clientCard}>
       <View style={styles.clientCardTop}>
@@ -107,6 +108,16 @@ function ClientCard({ client, delay }: { client: typeof clients[0]; delay: numbe
       </View>
       <Text style={styles.clientName}>{client.name}</Text>
       <Text style={styles.clientDesc}>{client.description}</Text>
+      {client.website ? (
+        <TouchableOpacity
+          onPress={handleVisit}
+          accessibilityRole="link"
+          accessibilityLabel={`Visit ${client.name} website`}
+          style={styles.clientWebsiteRow}
+        >
+          <Text style={styles.clientWebsiteText}>Visit website →</Text>
+        </TouchableOpacity>
+      ) : null}
     </AnimatedSection>
   );
 }
@@ -129,6 +140,8 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
   const isDesktop = useIsDesktop();
   const winWidth = useWindowWidth();
   const heroFontSize = winWidth < 600 ? 38 : winWidth < 1024 ? 52 : 64;
+  const clientSectionFontSize = winWidth < 600 ? 24 : 32;
+  const ctaFontSize = winWidth < 600 ? 24 : winWidth < 1024 ? 32 : 42;
 
   return (
     <ScreenContainer navigate={navigate}>
@@ -192,7 +205,7 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
             <Text style={styles.sectionLabel}>OUR CLIENTS</Text>
             <View style={styles.sectionLabelRule} />
           </View>
-          <Text style={[styles.sectionHeading, { fontSize: winWidth < 600 ? 24 : 32 }]}>
+          <Text style={[styles.sectionHeading, { fontSize: clientSectionFontSize, lineHeight: clientSectionFontSize * 1.3 }]}>
             Trusted by leading technology{'\n'}product companies.
           </Text>
           <View style={[styles.clientGrid, isDesktop && styles.clientGridDesktop]}>
@@ -268,7 +281,7 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
           <Text style={styles.ctaBandEyebrow}>READY TO PARTNER?</Text>
           <Text style={[
             styles.ctaBandHeading,
-            { fontSize: winWidth < 600 ? 24 : winWidth < 1024 ? 32 : 42 },
+            { fontSize: ctaFontSize, lineHeight: ctaFontSize * 1.25 },
           ]}>
             Looking for a reliable IT delivery{'\n'}partner or specialist vendor?
           </Text>
@@ -418,7 +431,6 @@ const styles = StyleSheet.create({
   sectionHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textPrimary,
-    lineHeight: 1.3 * 32,
   },
 
   clientGrid: {
@@ -470,6 +482,18 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.size.small,
     color: theme.colors.textSecondary,
     lineHeight: theme.typography.size.small * 1.7,
+  },
+  clientWebsiteRow: {
+    marginTop: theme.spacing.sm,
+    paddingTop: theme.spacing.md,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  clientWebsiteText: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.blue,
+    letterSpacing: 0.3,
   },
 
   // ── Features + Chart ─────────────────────────────────────────────────
@@ -686,7 +710,6 @@ const styles = StyleSheet.create({
   ctaBandHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.25 * 42,
   },
   ctaBandSub: {
     fontFamily: theme.typography.fontBody,

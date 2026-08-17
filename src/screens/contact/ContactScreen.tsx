@@ -14,6 +14,8 @@ export type ContactScreenProps = ScreenProps;
 export default function ContactScreen({ navigate }: ContactScreenProps) {
   const winWidth = useWindowWidth();
   const isDesktop = winWidth >= 1024;
+  const heroFontSize = winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52;
+  const leftHeadingSize = winWidth < 600 ? 24 : 32;
 
   const handleEmail = () => {
     void Linking.openURL(`mailto:${contactContent.email}`);
@@ -33,7 +35,7 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
           <AnimatedSection delay={80}>
             <Text style={[
               styles.heroHeading,
-              { fontSize: winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52 },
+              { fontSize: heroFontSize, lineHeight: heroFontSize * 1.22 },
             ]}>
               Ready to build something{'\n'}great together?
             </Text>
@@ -51,7 +53,7 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
               <Text style={styles.leftEyebrow}>LET'S START A CONVERSATION</Text>
               <Text style={[
                 styles.leftHeading,
-                { fontSize: winWidth < 600 ? 24 : 32 },
+                { fontSize: leftHeadingSize, lineHeight: leftHeadingSize * 1.3 },
               ]}>
                 We partner with businesses to create lasting technology outcomes.
               </Text>
@@ -103,14 +105,16 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
 
                 <View style={styles.contactDivider} />
 
-                {/* Location */}
+                {/* Locations */}
                 <View style={styles.contactRow}>
                   <View style={styles.contactIconBox}>
                     <Text style={styles.contactIcon}>📍</Text>
                   </View>
                   <View style={styles.contactRowText}>
-                    <Text style={styles.contactRowLabel}>Location</Text>
-                    <Text style={styles.contactRowValue}>{contactContent.location}</Text>
+                    <Text style={styles.contactRowLabel}>Offices</Text>
+                    {contactContent.locations.map(loc => (
+                      <Text key={loc} style={styles.contactRowValue}>{loc}, India</Text>
+                    ))}
                   </View>
                 </View>
 
@@ -140,7 +144,7 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
         <PageWrapper style={styles.bottomBandContent}>
           <AnimatedSection delay={0}>
             <Text style={styles.bottomBandText}>
-              Delhi, India · Global delivery · Enterprise-grade solutions
+              Delhi · Noida · India · Global delivery · Enterprise-grade solutions
             </Text>
           </AnimatedSection>
         </PageWrapper>
@@ -182,7 +186,6 @@ const styles = StyleSheet.create({
   heroHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.22 * 52,
     maxWidth: 600,
   },
 
@@ -220,7 +223,6 @@ const styles = StyleSheet.create({
   leftHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textPrimary,
-    lineHeight: 1.3 * 32,
   },
   leftAccent: {
     width: 48,

@@ -1,5 +1,6 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { theme, maxContentWidth } from '../../theme';
+import { contactContent } from '../../constants/content';
 import Logo from '../ui/Logo';
 import type { RouteKey } from '../../navigation/types';
 
@@ -33,7 +34,7 @@ export default function Footer({ navigate }: FooterProps) {
             </View>
             <Text style={styles.tagline}>Build · Grow · Create value</Text>
             <Text style={styles.taglineBody}>
-              Delhi-based IT consultancy delivering enterprise-grade technology partnerships.
+              Delhi-based IT services company delivering AFC systems, enterprise software, and government technology solutions.
             </Text>
           </View>
 
@@ -58,8 +59,10 @@ export default function Footer({ navigate }: FooterProps) {
           {/* Contact block */}
           <View style={styles.contactBlock}>
             <Text style={styles.navHeading}>CONTACT</Text>
-            <Text style={styles.contactText}>contact@kysamventures.com</Text>
-            <Text style={styles.contactText}>Delhi, India</Text>
+            <Text style={styles.contactText}>{contactContent.email}</Text>
+            {contactContent.locations.map(loc => (
+              <Text key={loc} style={styles.contactText}>{loc}, India</Text>
+            ))}
             {navigate && (
               <TouchableOpacity
                 style={styles.ctaBtn}

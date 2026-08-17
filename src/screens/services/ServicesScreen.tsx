@@ -87,6 +87,7 @@ function ServiceRow({ index, service }: ServiceRowProps) {
 // ── Main screen ─────────────────────────────────────────────────────────────
 export default function ServicesScreen({ navigate }: ServicesScreenProps) {
   const winWidth = useWindowWidth();
+  const heroFontSize = winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52;
 
   return (
     <ScreenContainer navigate={navigate}>
@@ -102,14 +103,14 @@ export default function ServicesScreen({ navigate }: ServicesScreenProps) {
           <AnimatedSection delay={80}>
             <Text style={[
               styles.heroHeading,
-              { fontSize: winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52 },
+              { fontSize: heroFontSize, lineHeight: heroFontSize * 1.2 },
             ]}>
               Six delivery lines.{'\n'}One trusted partner.
             </Text>
           </AnimatedSection>
           <AnimatedSection delay={160}>
             <Text style={styles.heroSubtext}>
-              From AFC system development to managed support — we deliver across the full technology lifecycle for Aurionpro, Sileo, and enterprise product companies.
+              Covering the full technology lifecycle — from AFC and transit platforms to enterprise software and government digitisation — for product companies and public-sector clients.
             </Text>
           </AnimatedSection>
         </PageWrapper>
@@ -193,7 +194,6 @@ const styles = StyleSheet.create({
   heroHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.2 * 52,
   },
   heroSubtext: {
     fontFamily: theme.typography.fontBody,

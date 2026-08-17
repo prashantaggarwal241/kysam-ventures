@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import TopNav from '../components/layout/TopNav';
+import SideNav from '../components/layout/SideNav';
 import type { RouteKey } from './types';
 import HomeScreen from '../screens/home/HomeScreen';
 import AboutScreen from '../screens/about/AboutScreen';
@@ -10,12 +10,18 @@ import ContactScreen from '../screens/contact/ContactScreen';
 
 export default function TopNavigator() {
   const [activeRoute, setActiveRoute] = useState<RouteKey>('Home');
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
-  const navigate = (route: RouteKey) => setActiveRoute(route);
+  const navigate = (route: RouteKey) => {
+    setActiveRoute(route);
+    setIsNavOpen(false);
+  };
+
+  const toggleNav = () => setIsNavOpen(prev => !prev);
 
   return (
     <View style={styles.container}>
-      <TopNav activeRoute={activeRoute} onNavigate={navigate} />
+      {/* Screen content — full width, full height */}
       <View style={styles.screen}>
         {activeRoute === 'Home'      && <HomeScreen navigate={navigate} />}
         {activeRoute === 'About'     && <AboutScreen navigate={navigate} />}
@@ -23,6 +29,14 @@ export default function TopNavigator() {
         {activeRoute === 'Expertise' && <ExpertiseScreen navigate={navigate} />}
         {activeRoute === 'Contact'   && <ContactScreen navigate={navigate} />}
       </View>
+
+      {/* Sliding sidebar + toggle button (overlay) */}
+      <SideNav
+        activeRoute={activeRoute}
+        isOpen={isNavOpen}
+        onToggle={toggleNav}
+        onNavigate={navigate}
+      />
     </View>
   );
 }
@@ -30,6 +44,7 @@ export default function TopNavigator() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    overflow: 'hidden',
   },
   screen: {
     flex: 1,

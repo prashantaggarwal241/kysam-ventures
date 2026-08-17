@@ -13,6 +13,8 @@ export type AboutScreenProps = ScreenProps;
 export default function AboutScreen({ navigate }: AboutScreenProps) {
   const winWidth = useWindowWidth();
   const isDesktop = winWidth >= 1024;
+  const heroFontSize = winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52;
+  const valuesFontSize = winWidth < 600 ? 28 : 36;
 
   return (
     <ScreenContainer navigate={navigate}>
@@ -28,7 +30,7 @@ export default function AboutScreen({ navigate }: AboutScreenProps) {
           <AnimatedSection delay={80}>
             <Text style={[
               styles.heroHeading,
-              { fontSize: winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52 },
+              { fontSize: heroFontSize, lineHeight: heroFontSize * 1.2 },
             ]}>
               Your Technology{'\n'}Delivery Partner
             </Text>
@@ -75,7 +77,7 @@ export default function AboutScreen({ navigate }: AboutScreenProps) {
             <Text style={styles.valuesEyebrow}>OUR VALUES</Text>
             <Text style={[
               styles.valuesHeading,
-              { fontSize: winWidth < 600 ? 28 : 36 },
+              { fontSize: valuesFontSize, lineHeight: valuesFontSize * 1.25 },
             ]}>
               The principles we build on.
             </Text>
@@ -133,7 +135,6 @@ const styles = StyleSheet.create({
   heroHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.2 * 52,
     maxWidth: 640,
   },
   heroAccent: {
@@ -223,7 +224,6 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.size.h3,
     color: theme.colors.textPrimary,
     lineHeight: theme.typography.size.h3 * 1.65,
-    fontStyle: 'italic',
   },
 
   // ── Values band ──────────────────────────────────────────────────────────
@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
   valuesHeading: {
     fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: 1.25 * 36,
   },
 
   valuesGrid: {
