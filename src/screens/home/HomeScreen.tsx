@@ -1,22 +1,37 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  Easing,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import PageWrapper from '../../components/layout/PageWrapper';
-import Card from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import SectionLabel from '../../components/ui/SectionLabel';
 import GrowthChart from '../../components/ui/GrowthChart';
+import IconBadge from '../../components/ui/IconBadge';
 import Marquee from '../../components/ui/Marquee';
-import { homeContent, services } from '../../constants/content';
+import HeroBackground from '../../components/ui/HeroBackground';
+import AnimatedSection from '../../components/ui/AnimatedSection';
+import {
+  homeContent,
+  services,
+  whyKysam,
+  clients,
+  SERVICE_TICKER,
+} from '../../constants/content';
 import { theme } from '../../theme';
+import { useWindowWidth, useIsDesktop } from '../../hooks/useWindowWidth';
 import type { ScreenProps } from '../../navigation/types';
+import type { ServiceContent } from '../../constants/content';
 
 export type HomeScreenProps = ScreenProps;
 
-const SERVICE_NAMES = services.map(s => s.name);
 const COUNTER_TARGET = 6;
-const COUNTER_DURATION_MS = 700;
-const COUNTER_STEP_MS = 50;
+const COUNTER_DURATION_MS = 900;
+const COUNTER_STEP_MS = 60;
 
 function useLiveCounter(target: number, duration: number, stepMs: number): number {
   const [count, setCount] = useState(0);
@@ -33,81 +48,235 @@ function useLiveCounter(target: number, duration: number, stepMs: number): numbe
   return count;
 }
 
-export default function HomeScreen({ navigate }: HomeScreenProps) {
-  const counter = useLiveCounter(COUNTER_TARGET, COUNTER_DURATION_MS, COUNTER_STEP_MS);
+// ── Numbered service row with hover animation ─────────────────────────────
+interface ServiceRowProps {
+  index: number;
+  service: ServiceContent;
+}
+
+function ServiceRow({ index, service }: ServiceRowProps) {
+  const hover = useSharedValue(0);
+
+  const numberStyle = useAnimatedStyle(() => ({
+    color: interpolateColor(hover.value, [0, 1], ['rgba(255,255,255,0.22)', '#F5A623']),
+  }));
+  const barStyle = useAnimatedStyle(() => ({ opacity: hover.value }));
+  const nameStyle = useAnimatedStyle(() => ({
+    color: interpolateColor(hover.value, [0, 1], ['rgba(255,255,255,0.88)', '#FFFFFF']),
+  }));
+
+  function handleHoverIn() {
+    hover.value = withTiming(1, { duration: 180, easing: Easing.out(Easing.quad) });
+  }
+  function handleHoverOut() {
+    hover.value = withTiming(0, { duration: 220, easing: Easing.out(Easing.quad) });
+  }
 
   return (
-    <ScreenContainer>
+    <Pressable
+      onHoverIn={handleHoverIn}
+      onHoverOut={handleHoverOut}
+      accessibilityRole="button"
+      accessibilityLabel={service.name}
+    >
+      <View style={styles.serviceRow}>
+        <Animated.View style={[styles.serviceHoverBar, barStyle]} />
+        <Animated.Text style={[styles.serviceNumber, numberStyle]}>
+          {String(index + 1).padStart(2, '0')}
+        </Animated.Text>
+        <View style={styles.serviceNameBlock}>
+          <Animated.Text style={[styles.serviceName, nameStyle]}>
+            {service.name}
+          </Animated.Text>
+          <Text style={styles.serviceDesc}>{service.shortDescription}</Text>
+        </View>
+        <IconBadge iconName={service.icon} tone="blue" size="sm" />
+      </View>
+      <View style={styles.serviceRowDivider} />
+    </Pressable>
+  );
+}
 
-      {/* ── Hero — full-bleed dark band ──────────────────────────────── */}
+// ── Client trust card ─────────────────────────────────────────────────────
+function ClientCard({ client, delay }: { client: typeof clients[0]; delay: number }) {
+  return (
+    <AnimatedSection delay={delay} style={styles.clientCard}>
+      <View style={styles.clientCardTop}>
+        <View style={styles.clientDot} />
+        <Text style={styles.clientSector}>{client.sector}</Text>
+      </View>
+      <Text style={styles.clientName}>{client.name}</Text>
+      <Text style={styles.clientDesc}>{client.description}</Text>
+    </AnimatedSection>
+  );
+}
+
+// ── Feature card ──────────────────────────────────────────────────────────
+function FeatureCard({ item, delay }: { item: typeof whyKysam[0]; delay: number }) {
+  return (
+    <AnimatedSection delay={delay} style={styles.featureCard}>
+      <View style={styles.featureIconCircle}>
+        <IconBadge iconName={item.icon} tone="blue" size="md" />
+      </View>
+      <Text style={styles.featureLabel}>{item.label.replace('\n', ' ')}</Text>
+    </AnimatedSection>
+  );
+}
+
+// ── Main screen ───────────────────────────────────────────────────────────
+export default function HomeScreen({ navigate }: HomeScreenProps) {
+  const counter = useLiveCounter(COUNTER_TARGET, COUNTER_DURATION_MS, COUNTER_STEP_MS);
+  const isDesktop = useIsDesktop();
+  const winWidth = useWindowWidth();
+  const heroFontSize = winWidth < 600 ? 38 : winWidth < 1024 ? 52 : 64;
+
+  return (
+    <ScreenContainer navigate={navigate}>
+
+      {/* ══ 1. HERO ════════════════════════════════════════════════════════ */}
       <View style={styles.hero}>
-        {/* "K" watermark — decorative, absolute-positioned within hero */}
+        <HeroBackground />
         <Text style={styles.kWatermark} accessibilityElementsHidden>K</Text>
         <PageWrapper style={styles.heroContent}>
-          <Text style={styles.eyebrow}>{homeContent.eyebrow}</Text>
-          <Text style={styles.heading}>{homeContent.heading}</Text>
-          <Text style={styles.subtext}>{homeContent.subtext}</Text>
-          <View style={styles.ctaRow}>
-            <Button label="Get in touch" onPress={() => navigate('Contact')} />
-            <Button
-              label="Our services"
-              variant="secondary"
-              onPress={() => navigate('Services')}
-            />
+
+          {/* Eyebrow */}
+          <View style={styles.eyebrowRow}>
+            <View style={styles.eyebrowDot} />
+            <Text style={styles.eyebrow}>{homeContent.eyebrow}</Text>
+          </View>
+
+          {/* Headline */}
+          <AnimatedSection delay={60} style={styles.headingBlock}>
+            <Text style={[styles.heading, { fontSize: heroFontSize, lineHeight: heroFontSize * 1.18 }]}>
+              Technology{'\n'}
+              <Text style={styles.headingAccent}>Delivery.</Text>{'\n'}
+              Business{'\n'}outcomes.
+            </Text>
+          </AnimatedSection>
+
+          <View style={styles.accentRule} />
+
+          {/* Subtext */}
+          <AnimatedSection delay={120}>
+            <Text style={styles.heroSubtext}>{homeContent.subtext}</Text>
+          </AnimatedSection>
+
+          {/* Client trust badges */}
+          <AnimatedSection delay={180}>
+            <View style={styles.trustBadgeRow}>
+              <Text style={styles.trustBadgeLabel}>Delivery partner to</Text>
+              <View style={styles.trustBadge}>
+                <Text style={styles.trustBadgeText}>Aurionpro Solutions</Text>
+              </View>
+              <View style={styles.trustBadge}>
+                <Text style={styles.trustBadgeText}>Sileo</Text>
+              </View>
+            </View>
+          </AnimatedSection>
+
+          {/* CTAs */}
+          <AnimatedSection delay={240}>
+            <View style={styles.ctaRow}>
+              <Button label="Get in touch" onPress={() => navigate('Contact')} />
+              <Button label="Our services" variant="ghost" onPress={() => navigate('Services')} />
+            </View>
+          </AnimatedSection>
+
+        </PageWrapper>
+      </View>
+
+      {/* ══ 2. CLIENT CREDIBILITY SECTION ══════════════════════════════════ */}
+      <View style={styles.clientSection}>
+        <PageWrapper style={styles.clientSectionContent}>
+          <View style={styles.sectionLabelRow}>
+            <Text style={styles.sectionLabel}>OUR CLIENTS</Text>
+            <View style={styles.sectionLabelRule} />
+          </View>
+          <Text style={[styles.sectionHeading, { fontSize: winWidth < 600 ? 24 : 32 }]}>
+            Trusted by leading technology{'\n'}product companies.
+          </Text>
+          <View style={[styles.clientGrid, isDesktop && styles.clientGridDesktop]}>
+            {clients.map((client, i) => (
+              <ClientCard key={client.name} client={client} delay={60 * i} />
+            ))}
           </View>
         </PageWrapper>
       </View>
 
-      {/* ── Content — floating chart card + light section ─────────────── */}
-      <PageWrapper style={styles.contentSection}>
+      {/* ══ 3. FEATURES + CHART ════════════════════════════════════════════ */}
+      <View style={styles.featuresSection}>
+        <PageWrapper style={styles.featuresSectionContent}>
 
-        {/* Floating Growth Chart card — overlaps the hero bottom */}
-        <View style={styles.growthCardWrap}>
-          <Card variant="surface" style={styles.growthCard}>
-            <SectionLabel>Growth trajectory</SectionLabel>
-            <GrowthChart />
-          </Card>
-        </View>
+          {/* Floating Growth Chart card */}
+          <AnimatedSection delay={0} style={styles.chartWrap}>
+            <View style={styles.chartCard}>
+              <View style={styles.chartCardHeader}>
+                <View style={styles.chartCardAccent} />
+                <Text style={styles.chartCardLabel}>DELIVERY GROWTH</Text>
+              </View>
+              <GrowthChart />
+            </View>
+          </AnimatedSection>
 
-        {/* Fact cards */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.factRow}
-        >
-          {homeContent.factCards.map(card => (
-            <Card key={card.stat} variant="surface" style={styles.factCard}>
-              <Text style={styles.factStat}>{card.stat}</Text>
-              <Text style={styles.factLabel}>{card.label}</Text>
-            </Card>
-          ))}
-        </ScrollView>
+          {/* Why KySam feature cards */}
+          <View style={[styles.featureGrid, isDesktop && styles.featureGridDesktop]}>
+            {whyKysam.map((item, i) => (
+              <FeatureCard key={item.label} item={item} delay={80 * i} />
+            ))}
+          </View>
 
-        {/* Live counter */}
-        <View style={styles.counterRow}>
-          <Text style={styles.counterNumber}>{counter}</Text>
-          <Text style={styles.counterCaption}> core service lines, one long-term partner</Text>
-        </View>
+          {/* Ticker */}
+          <View style={styles.marqueeSeparator}>
+            <Marquee items={SERVICE_TICKER} />
+          </View>
 
-        {/* Service marquee */}
-        <View style={styles.marqueeSection}>
-          <SectionLabel>What we do</SectionLabel>
-          <Marquee items={SERVICE_NAMES} />
-        </View>
+        </PageWrapper>
+      </View>
 
-      </PageWrapper>
+      {/* ══ 4. SERVICES DARK BAND ══════════════════════════════════════════ */}
+      <View style={styles.servicesBand}>
+        <HeroBackground variant="dark" />
+        <PageWrapper style={styles.servicesBandContent}>
 
-      {/* ── Dark CTA band — full-bleed ───────────────────────────────── */}
+          <View style={[styles.servicesBandHeader, isDesktop && styles.servicesBandHeaderDesktop]}>
+            <View style={styles.servicesBandLeft}>
+              <Text style={styles.servicesBandEyebrow}>WHAT WE DELIVER</Text>
+              <Text style={[styles.servicesBandHeading, { fontSize: winWidth < 600 ? 26 : 34 }]}>
+                {counter} service lines.{'\n'}One delivery partner.
+              </Text>
+            </View>
+            <View style={styles.counterBlock}>
+              <Text style={styles.counterNumber}>{counter}</Text>
+              <View style={styles.counterAccent} />
+            </View>
+          </View>
+
+          <View style={styles.servicesList}>
+            <View style={styles.servicesListTopRule} />
+            {services.map((service, i) => (
+              <ServiceRow key={service.slug} index={i} service={service} />
+            ))}
+          </View>
+
+        </PageWrapper>
+      </View>
+
+      {/* ══ 5. CTA BAND ════════════════════════════════════════════════════ */}
       <View style={styles.ctaBand}>
+        <HeroBackground />
         <PageWrapper style={styles.ctaBandContent}>
-          <Text style={styles.ctaBandHeading}>
-            Have a technology challenge or a new idea?
+          <Text style={styles.ctaBandEyebrow}>READY TO PARTNER?</Text>
+          <Text style={[
+            styles.ctaBandHeading,
+            { fontSize: winWidth < 600 ? 24 : winWidth < 1024 ? 32 : 42 },
+          ]}>
+            Looking for a reliable IT delivery{'\n'}partner or specialist vendor?
           </Text>
-          <Button
-            label="Let's talk"
-            onPress={() => navigate('Contact')}
-            variant="primary"
-          />
+          <Text style={styles.ctaBandSub}>
+            We bring AFC expertise, proven delivery track record, and the capacity to scale — exactly what product companies need in a long-term technology partner.
+          </Text>
+          <View style={styles.ctaBandRule} />
+          <Button label="Get in touch" onPress={() => navigate('Contact')} />
         </PageWrapper>
       </View>
 
@@ -115,136 +284,422 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
   );
 }
 
-const HERO_EXTRA_BOTTOM = 56; // extra space at hero bottom for the floating card overlap
+// ── Styles ────────────────────────────────────────────────────────────────
+const HERO_OVERLAP = 64;
 
 const styles = StyleSheet.create({
 
-  // ── Hero ──────────────────────────────────────────────────
+  // ── Hero ────────────────────────────────────────────────────────────────
   hero: {
     backgroundColor: theme.colors.navyHero,
-    paddingTop: theme.spacing.xxxl,
-    paddingBottom: theme.spacing.xxxl + HERO_EXTRA_BOTTOM,
+    paddingBottom: HERO_OVERLAP,
     overflow: 'hidden',
+    position: 'relative',
   },
   kWatermark: {
     position: 'absolute',
-    right: -10,
-    top: -24,
+    right: -16,
+    bottom: -40,
     fontFamily: theme.typography.fontDisplayBold,
-    fontSize: 160,
-    color: theme.colors.navy,
-  },
+    fontSize: 320,
+    color: 'rgba(255,255,255,0.035)',
+    userSelect: 'none',
+  } as any,
   heroContent: {
-    paddingTop: 0,
+    paddingTop: theme.spacing.xxxl,
     paddingBottom: 0,
+    gap: theme.spacing.lg,
+  },
+  eyebrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: theme.spacing.md,
+  },
+  eyebrowDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.amber,
   },
   eyebrow: {
     fontFamily: theme.typography.fontBodyMedium,
     fontSize: theme.typography.size.caption,
     color: theme.colors.textOnDarkMuted,
-    letterSpacing: 1.5,
+    letterSpacing: 1.8,
     textTransform: 'uppercase',
   },
+  headingBlock: {},
   heading: {
     fontFamily: theme.typography.fontDisplayBold,
-    fontSize: theme.typography.size.h1,
     color: theme.colors.textOnDark,
-    lineHeight: theme.typography.size.h1 * 1.2,
     marginTop: theme.spacing.sm,
   },
-  subtext: {
+  headingAccent: {
+    color: theme.colors.amber,
+  },
+  accentRule: {
+    width: 56,
+    height: 2,
+    backgroundColor: theme.colors.amber,
+    borderRadius: 1,
+    marginTop: theme.spacing.xs,
+  },
+  heroSubtext: {
     fontFamily: theme.typography.fontBody,
     fontSize: theme.typography.size.body,
     color: theme.colors.textOnDarkMuted,
-    lineHeight: theme.typography.size.body * 1.65,
+    lineHeight: theme.typography.size.body * 1.7,
+    maxWidth: 560,
   },
+
+  // Trust badges
+  trustBadgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: theme.spacing.sm,
+    marginTop: theme.spacing.xs,
+  },
+  trustBadgeLabel: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textOnDarkSubtle,
+  },
+  trustBadge: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.16)',
+    borderRadius: theme.radius.pill,
+    paddingVertical: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.md,
+  },
+  trustBadgeText: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textOnDark,
+  },
+
   ctaRow: {
     flexDirection: 'row',
-    gap: theme.spacing.sm,
-    marginTop: theme.spacing.sm,
+    gap: theme.spacing.md,
     flexWrap: 'wrap',
+    paddingBottom: theme.spacing.xxxl,
+    marginTop: theme.spacing.sm,
   },
 
-  // ── Content section ────────────────────────────────────────
-  contentSection: {
-    paddingTop: 0, // growthCardWrap negative marginTop creates the hero overlap
+  // ── Client section ────────────────────────────────────────────────────
+  clientSection: {
+    backgroundColor: theme.colors.surfaceAlt,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
+  clientSectionContent: {
+    paddingTop: theme.spacing.xxxl,
+    paddingBottom: theme.spacing.xxxl,
     gap: theme.spacing.xxl,
   },
-
-  // ── Floating growth chart card ─────────────────────────────
-  growthCardWrap: {
-    marginTop: -HERO_EXTRA_BOTTOM,
-    zIndex: 10,
+  sectionLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md,
   },
-  growthCard: {
-    elevation: 6,
-    shadowColor: theme.colors.navyHero,
+  sectionLabel: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.textMuted,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
+  sectionLabelRule: {
+    flex: 1,
+    height: 1,
+    backgroundColor: theme.colors.border,
+  },
+  sectionHeading: {
+    fontFamily: theme.typography.fontDisplayBold,
+    color: theme.colors.textPrimary,
+    lineHeight: 1.3 * 32,
+  },
+
+  clientGrid: {
+    gap: theme.spacing.lg,
+  },
+  clientGridDesktop: {
+    flexDirection: 'row',
+  },
+  clientCard: {
+    flex: 1,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    padding: theme.spacing.xxl,
+    gap: theme.spacing.md,
+    elevation: 2,
+    shadowColor: theme.colors.navy,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.14,
+    shadowOpacity: 0.06,
     shadowRadius: 12,
+  },
+  clientCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: theme.spacing.sm,
   },
-
-  // ── Facts ──────────────────────────────────────────────────
-  factRow: {
-    gap: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
+  clientDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: theme.colors.amber,
   },
-  factCard: {
-    width: 180,
-    gap: theme.spacing.xs,
+  clientSector: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.amber,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
   },
-  factStat: {
-    fontFamily: theme.typography.fontDisplay,
-    fontSize: theme.typography.size.h3,
+  clientName: {
+    fontFamily: theme.typography.fontDisplayBold,
+    fontSize: theme.typography.size.h2,
     color: theme.colors.textPrimary,
-    lineHeight: theme.typography.size.h3 * 1.3,
+    lineHeight: theme.typography.size.h2 * 1.2,
   },
-  factLabel: {
+  clientDesc: {
     fontFamily: theme.typography.fontBody,
     fontSize: theme.typography.size.small,
     color: theme.colors.textSecondary,
+    lineHeight: theme.typography.size.small * 1.7,
   },
 
-  // ── Counter ────────────────────────────────────────────────
-  counterRow: {
+  // ── Features + Chart ─────────────────────────────────────────────────
+  featuresSection: {
+    backgroundColor: theme.colors.background,
+  },
+  featuresSectionContent: {
+    paddingTop: 0,
+    gap: theme.spacing.xxl,
+  },
+
+  chartWrap: {
+    marginTop: -HERO_OVERLAP,
+    zIndex: 10,
+  },
+  chartCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    padding: theme.spacing.xl,
+    elevation: 8,
+    shadowColor: theme.colors.navyHero,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.12,
+    shadowRadius: 24,
+    gap: theme.spacing.md,
+  },
+  chartCardHeader: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  chartCardAccent: {
+    width: 3,
+    height: 14,
+    backgroundColor: theme.colors.amber,
+    borderRadius: 2,
+  },
+  chartCardLabel: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.textMuted,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+
+  featureGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.lg,
+  },
+  featureGridDesktop: {
+    flexWrap: 'nowrap',
+  },
+  featureCard: {
+    flex: 1,
+    minWidth: 160,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.md,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    padding: theme.spacing.xl,
+    gap: theme.spacing.md,
+    alignItems: 'flex-start',
+  },
+  featureIconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: theme.colors.blueTint,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  featureLabel: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.h4,
+    color: theme.colors.textPrimary,
+    lineHeight: theme.typography.size.h4 * 1.4,
+  },
+
+  marqueeSeparator: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: theme.colors.border,
+    paddingVertical: theme.spacing.lg,
+    backgroundColor: theme.colors.surfaceAlt,
+  },
+
+  // ── Services dark band ────────────────────────────────────────────────
+  servicesBand: {
+    backgroundColor: theme.colors.navy,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  servicesBandContent: {
+    paddingTop: theme.spacing.xxxl,
+    paddingBottom: theme.spacing.xxxl,
+    gap: theme.spacing.xxl,
+  },
+  servicesBandHeader: {
+    gap: theme.spacing.xl,
+  },
+  servicesBandHeaderDesktop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  servicesBandLeft: {
+    gap: theme.spacing.md,
+    flex: 1,
+  },
+  servicesBandEyebrow: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.amber,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+  },
+  servicesBandHeading: {
+    fontFamily: theme.typography.fontDisplayBold,
+    color: theme.colors.textOnDark,
+    lineHeight: 1.22 * 34,
+  },
+  counterBlock: {
+    alignItems: 'center',
+    gap: theme.spacing.xs,
+    paddingRight: theme.spacing.xl,
   },
   counterNumber: {
     fontFamily: theme.typography.fontDisplayBold,
-    fontSize: 40,
+    fontSize: 96,
     color: theme.colors.amber,
-    lineHeight: 44,
+    lineHeight: 96,
+    opacity: 0.9,
   },
-  counterCaption: {
+  counterAccent: {
+    width: 40,
+    height: 2,
+    backgroundColor: theme.colors.amber,
+    opacity: 0.4,
+    borderRadius: 1,
+  },
+
+  servicesList: {},
+  servicesListTopRule: {
+    height: 1,
+    backgroundColor: theme.colors.glassOnDarkBorder,
+  },
+  serviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.md,
+    gap: theme.spacing.xl,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  serviceHoverBar: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    width: 3,
+    backgroundColor: theme.colors.amber,
+    borderRadius: 2,
+  },
+  serviceNumber: {
+    fontFamily: theme.typography.fontDisplayBold,
+    fontSize: theme.typography.size.h2,
+    minWidth: 52,
+    lineHeight: theme.typography.size.h2 * 1.2,
+  },
+  serviceNameBlock: {
+    flex: 1,
+    gap: theme.spacing.xs,
+  },
+  serviceName: {
+    fontFamily: theme.typography.fontDisplay,
+    fontSize: theme.typography.size.h3,
+    lineHeight: theme.typography.size.h3 * 1.3,
+  },
+  serviceDesc: {
     fontFamily: theme.typography.fontBody,
-    fontSize: theme.typography.size.body,
-    color: theme.colors.textSecondary,
-    flexShrink: 1,
-    lineHeight: theme.typography.size.body * 1.5,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textOnDarkMuted,
+    lineHeight: theme.typography.size.small * 1.6,
+  },
+  serviceRowDivider: {
+    height: 1,
+    backgroundColor: theme.colors.glassOnDarkBorder,
+    marginHorizontal: theme.spacing.md,
   },
 
-  // ── Marquee ────────────────────────────────────────────────
-  marqueeSection: {
-    gap: theme.spacing.sm,
-  },
-
-  // ── Dark CTA band ──────────────────────────────────────────
+  // ── CTA band ─────────────────────────────────────────────────────────
   ctaBand: {
     backgroundColor: theme.colors.navyHero,
+    overflow: 'hidden',
+    position: 'relative',
   },
   ctaBandContent: {
-    paddingTop: theme.spacing.xxxl,
-    paddingBottom: theme.spacing.xxxl,
+    paddingTop: theme.spacing.section,
+    paddingBottom: theme.spacing.section,
     alignItems: 'flex-start',
     gap: theme.spacing.xl,
   },
+  ctaBandEyebrow: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.amber,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+  },
   ctaBandHeading: {
-    fontFamily: theme.typography.fontDisplay,
-    fontSize: theme.typography.size.h2,
+    fontFamily: theme.typography.fontDisplayBold,
     color: theme.colors.textOnDark,
-    lineHeight: theme.typography.size.h2 * 1.35,
+    lineHeight: 1.25 * 42,
+  },
+  ctaBandSub: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.body,
+    color: theme.colors.textOnDarkMuted,
+    lineHeight: theme.typography.size.body * 1.7,
+    maxWidth: 560,
+  },
+  ctaBandRule: {
+    width: 48,
+    height: 2,
+    backgroundColor: theme.colors.amber,
+    opacity: 0.5,
+    borderRadius: 1,
   },
 });

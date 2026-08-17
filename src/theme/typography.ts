@@ -3,5 +3,14 @@ export const typography = {
   fontDisplayBold: 'IBMPlexSans_700Bold',
   fontBody: 'Inter_400Regular',
   fontBodyMedium: 'Inter_500Medium',
-  size: { h1: 32, h2: 20, h3: 16, body: 13, small: 11, caption: 9.5 },
+  size: {
+    display: 64,  // hero editorial headline
+    h1: 44,       // page section heading
+    h2: 28,       // subsection heading
+    h3: 20,       // card / item heading
+    h4: 16,       // small heading
+    body: 15,
+    small: 12,
+    caption: 10,
+  },
 } as const;

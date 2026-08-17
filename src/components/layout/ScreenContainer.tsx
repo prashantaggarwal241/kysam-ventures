@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import type { ReactNode } from 'react';
 import { theme } from '../../theme';
 import Footer from './Footer';
+import type { RouteKey } from '../../navigation/types';
 
 // TopNav handles the top inset; ScreenContainer covers left, right, bottom.
 const SAFE_EDGES = ['left', 'right', 'bottom'] as const;
@@ -10,16 +11,17 @@ const SAFE_EDGES = ['left', 'right', 'bottom'] as const;
 export interface ScreenContainerProps {
   children: ReactNode;
   scrollable?: boolean;
-  /** Pass true to suppress the automatic Footer (e.g. when screen needs a custom footer). */
   noFooter?: boolean;
+  navigate?: (route: RouteKey) => void;
 }
 
 export default function ScreenContainer({
   children,
   scrollable = true,
   noFooter = false,
+  navigate,
 }: ScreenContainerProps) {
-  const footer = noFooter ? null : <Footer />;
+  const footer = noFooter ? null : <Footer navigate={navigate} />;
 
   if (scrollable) {
     return (

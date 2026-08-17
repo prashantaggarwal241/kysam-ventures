@@ -1,65 +1,370 @@
-import { View, Text, Linking, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, StyleSheet } from 'react-native';
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import PageWrapper from '../../components/layout/PageWrapper';
-import Card from '../../components/ui/Card';
-import SectionLabel from '../../components/ui/SectionLabel';
-import IconBadge from '../../components/ui/IconBadge';
 import Button from '../../components/ui/Button';
+import HeroBackground from '../../components/ui/HeroBackground';
+import AnimatedSection from '../../components/ui/AnimatedSection';
 import { contactContent } from '../../constants/content';
 import { theme } from '../../theme';
+import { useWindowWidth } from '../../hooks/useWindowWidth';
 import type { ScreenProps } from '../../navigation/types';
 
 export type ContactScreenProps = ScreenProps;
 
-export default function ContactScreen(_: ContactScreenProps) {
+export default function ContactScreen({ navigate }: ContactScreenProps) {
+  const winWidth = useWindowWidth();
+  const isDesktop = winWidth >= 1024;
+
   const handleEmail = () => {
     void Linking.openURL(`mailto:${contactContent.email}`);
   };
 
   return (
-    <ScreenContainer>
-      <PageWrapper>
-        <View style={styles.section}>
-          <SectionLabel>Get in touch</SectionLabel>
-          <Card variant="surface" style={styles.contactCard}>
-            <View style={styles.contactRow}>
-              <IconBadge iconName="mail-outline" tone="blue" size="sm" />
-              <Text style={styles.contactText}>{contactContent.email}</Text>
-            </View>
-            <View style={styles.contactRow}>
-              <IconBadge iconName="location-outline" tone="blue" size="sm" />
-              <Text style={styles.contactText}>{contactContent.location}</Text>
-            </View>
-          </Card>
-        </View>
+    <ScreenContainer navigate={navigate}>
 
-        <Button
-          label="Send us a message"
-          onPress={handleEmail}
-          accessibilityLabel="Send an email to KySam Ventures"
-        />
-      </PageWrapper>
+      {/* ── Dark hero header ──────────────────────────────────────────────── */}
+      <View style={styles.hero}>
+        <HeroBackground />
+        <Text style={styles.kWatermark} accessibilityElementsHidden>C</Text>
+        <PageWrapper style={styles.heroContent}>
+          <AnimatedSection delay={0}>
+            <Text style={styles.heroEyebrow}>GET IN TOUCH</Text>
+          </AnimatedSection>
+          <AnimatedSection delay={80}>
+            <Text style={[
+              styles.heroHeading,
+              { fontSize: winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52 },
+            ]}>
+              Ready to build something{'\n'}great together?
+            </Text>
+          </AnimatedSection>
+        </PageWrapper>
+      </View>
+
+      {/* ── Two-column content ────────────────────────────────────────────── */}
+      <View style={styles.contentSection}>
+        <PageWrapper style={styles.contentSectionInner}>
+          <View style={[styles.columns, isDesktop && styles.columnsDesktop]}>
+
+            {/* Left: context + intro */}
+            <AnimatedSection delay={100} style={[styles.leftCol, isDesktop ? styles.leftColDesktop : undefined]}>
+              <Text style={styles.leftEyebrow}>LET'S START A CONVERSATION</Text>
+              <Text style={[
+                styles.leftHeading,
+                { fontSize: winWidth < 600 ? 24 : 32 },
+              ]}>
+                We partner with businesses to create lasting technology outcomes.
+              </Text>
+              <View style={styles.leftAccent} />
+              <Text style={styles.leftBody}>
+                Whether you have a specific technology challenge, a new idea you'd like to explore, or simply want to understand how we can support your business — we'd love to hear from you.
+              </Text>
+
+              {/* Three mini-highlights */}
+              <View style={styles.highlightList}>
+                {[
+                  'No-obligation initial consultation',
+                  'Quick response within 24 hours',
+                  'Long-term partnership approach',
+                ].map(item => (
+                  <View key={item} style={styles.highlightItem}>
+                    <View style={styles.highlightDot} />
+                    <Text style={styles.highlightText}>{item}</Text>
+                  </View>
+                ))}
+              </View>
+            </AnimatedSection>
+
+            {/* Right: contact card */}
+            <AnimatedSection delay={200} style={[styles.rightCol, isDesktop && styles.rightColDesktop]}>
+              <View style={styles.contactCard}>
+
+                {/* Card header */}
+                <View style={styles.contactCardHeader}>
+                  <View style={styles.contactCardHeaderAccent} />
+                  <Text style={styles.contactCardHeaderLabel}>CONTACT DETAILS</Text>
+                </View>
+
+                {/* Email */}
+                <TouchableOpacity
+                  style={styles.contactRow}
+                  onPress={handleEmail}
+                  accessibilityRole="link"
+                  accessibilityLabel="Send email"
+                >
+                  <View style={styles.contactIconBox}>
+                    <Text style={styles.contactIcon}>✉</Text>
+                  </View>
+                  <View style={styles.contactRowText}>
+                    <Text style={styles.contactRowLabel}>Email</Text>
+                    <Text style={styles.contactRowValue}>{contactContent.email}</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <View style={styles.contactDivider} />
+
+                {/* Location */}
+                <View style={styles.contactRow}>
+                  <View style={styles.contactIconBox}>
+                    <Text style={styles.contactIcon}>📍</Text>
+                  </View>
+                  <View style={styles.contactRowText}>
+                    <Text style={styles.contactRowLabel}>Location</Text>
+                    <Text style={styles.contactRowValue}>{contactContent.location}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.contactDivider} />
+
+                {/* CTA */}
+                <View style={styles.contactCTABlock}>
+                  <Button
+                    label="Send us a message"
+                    onPress={handleEmail}
+                    accessibilityLabel="Send an email to KySam Ventures"
+                  />
+                  <Text style={styles.contactCTANote}>
+                    We respond within one business day.
+                  </Text>
+                </View>
+
+              </View>
+            </AnimatedSection>
+
+          </View>
+        </PageWrapper>
+      </View>
+
+      {/* ── Bottom dark stripe ────────────────────────────────────────────── */}
+      <View style={styles.bottomBand}>
+        <PageWrapper style={styles.bottomBandContent}>
+          <AnimatedSection delay={0}>
+            <Text style={styles.bottomBandText}>
+              Delhi, India · Global delivery · Enterprise-grade solutions
+            </Text>
+          </AnimatedSection>
+        </PageWrapper>
+      </View>
+
     </ScreenContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  section: {
-    gap: theme.spacing.md,
-    marginBottom: theme.spacing.xxl,
+
+  // ── Hero ────────────────────────────────────────────────────────────────
+  hero: {
+    backgroundColor: theme.colors.navyHero,
+    overflow: 'hidden',
+    position: 'relative',
   },
-  contactCard: {
+  kWatermark: {
+    position: 'absolute',
+    right: -10,
+    bottom: -50,
+    fontFamily: theme.typography.fontDisplayBold,
+    fontSize: 300,
+    color: 'rgba(255,255,255,0.03)',
+    userSelect: 'none',
+  } as any,
+  heroContent: {
+    paddingTop: theme.spacing.xxxl,
+    paddingBottom: theme.spacing.xxxl,
+    gap: theme.spacing.lg,
+  },
+  heroEyebrow: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.amber,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+  },
+  heroHeading: {
+    fontFamily: theme.typography.fontDisplayBold,
+    color: theme.colors.textOnDark,
+    lineHeight: 1.22 * 52,
+    maxWidth: 600,
+  },
+
+  // ── Content section ──────────────────────────────────────────────────────
+  contentSection: {
+    backgroundColor: theme.colors.background,
+  },
+  contentSectionInner: {
+    paddingTop: theme.spacing.xxxl,
+    paddingBottom: theme.spacing.xxxl,
+  },
+
+  columns: {
+    gap: theme.spacing.xxl,
+  },
+  columnsDesktop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+
+  // Left column
+  leftCol: {
+    gap: theme.spacing.xl,
+  },
+  leftColDesktop: {
+    flex: 1,
+  },
+  leftEyebrow: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.textMuted,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+  },
+  leftHeading: {
+    fontFamily: theme.typography.fontDisplayBold,
+    color: theme.colors.textPrimary,
+    lineHeight: 1.3 * 32,
+  },
+  leftAccent: {
+    width: 48,
+    height: 2,
+    backgroundColor: theme.colors.amber,
+    borderRadius: 1,
+  },
+  leftBody: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.body,
+    color: theme.colors.textSecondary,
+    lineHeight: theme.typography.size.body * 1.75,
+  },
+
+  highlightList: {
     gap: theme.spacing.md,
   },
-  contactRow: {
+  highlightItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: theme.spacing.md,
   },
-  contactText: {
+  highlightDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.amber,
+    flexShrink: 0,
+  },
+  highlightText: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.body,
+    color: theme.colors.textSecondary,
+  },
+
+  // Right column
+  rightCol: {},
+  rightColDesktop: {
+    flex: 1,
+    maxWidth: 440,
+  },
+  contactCard: {
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.lg,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: theme.colors.navy,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
+  },
+  contactCardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.xl,
+    backgroundColor: theme.colors.surfaceAlt,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  contactCardHeaderAccent: {
+    width: 3,
+    height: 14,
+    backgroundColor: theme.colors.amber,
+    borderRadius: 2,
+  },
+  contactCardHeaderLabel: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.textMuted,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
+  },
+
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.lg,
+    paddingVertical: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.xl,
+  },
+  contactIconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: theme.colors.blueTint,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  contactIcon: {
+    fontSize: 16,
+  },
+  contactRowText: {
+    flex: 1,
+    gap: theme.spacing.xs,
+  },
+  contactRowLabel: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.textMuted,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  contactRowValue: {
     fontFamily: theme.typography.fontBody,
     fontSize: theme.typography.size.body,
     color: theme.colors.textPrimary,
-    flex: 1,
+  },
+  contactDivider: {
+    height: 1,
+    backgroundColor: theme.colors.border,
+    marginHorizontal: theme.spacing.xl,
+  },
+  contactCTABlock: {
+    padding: theme.spacing.xl,
+    gap: theme.spacing.md,
+    alignItems: 'flex-start',
+  },
+  contactCTANote: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textMuted,
+  },
+
+  // ── Bottom band ──────────────────────────────────────────────────────────
+  bottomBand: {
+    backgroundColor: theme.colors.navyHero,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.glassOnDarkBorder,
+  },
+  bottomBandContent: {
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
+    alignItems: 'center',
+  },
+  bottomBandText: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textOnDarkSubtle,
+    letterSpacing: 0.5,
+    textAlign: 'center',
   },
 });

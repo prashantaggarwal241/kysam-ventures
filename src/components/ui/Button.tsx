@@ -1,10 +1,12 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { theme } from '../../theme';
 
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+
 export interface ButtonProps {
   label: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary';
+  variant?: ButtonVariant;
   disabled?: boolean;
   accessibilityLabel?: string;
 }
@@ -20,7 +22,9 @@ export default function Button({
     <TouchableOpacity
       style={[
         styles.base,
-        variant === 'primary' ? styles.primary : styles.secondary,
+        variant === 'primary' && styles.primary,
+        variant === 'secondary' && styles.secondary,
+        variant === 'ghost' && styles.ghost,
         disabled && styles.disabled,
       ]}
       onPress={onPress}
@@ -32,7 +36,9 @@ export default function Button({
       <Text
         style={[
           styles.label,
-          variant === 'primary' ? styles.primaryLabel : styles.secondaryLabel,
+          variant === 'primary' && styles.primaryLabel,
+          variant === 'secondary' && styles.secondaryLabel,
+          variant === 'ghost' && styles.ghostLabel,
         ]}
       >
         {label}
@@ -57,6 +63,11 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: theme.colors.navy,
   },
+  ghost: {
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.32)',
+  },
   disabled: {
     opacity: 0.4,
   },
@@ -69,5 +80,8 @@ const styles = StyleSheet.create({
   },
   secondaryLabel: {
     color: theme.colors.navy,
+  },
+  ghostLabel: {
+    color: theme.colors.textOnDark,
   },
 });

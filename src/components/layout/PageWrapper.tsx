@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { ViewStyle } from 'react-native';
 import { theme } from '../../theme';
 import { maxContentWidth } from '../../theme';
+import { useWindowWidth } from '../../hooks/useWindowWidth';
 
 export interface PageWrapperProps {
   children: ReactNode;
@@ -10,7 +11,14 @@ export interface PageWrapperProps {
 }
 
 export default function PageWrapper({ children, style }: PageWrapperProps) {
-  return <View style={[styles.wrapper, style]}>{children}</View>;
+  const width = useWindowWidth();
+  const px = width >= 1024 ? 48 : width >= 640 ? 32 : 20;
+
+  return (
+    <View style={[styles.wrapper, { paddingHorizontal: px }, style]}>
+      {children}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -18,7 +26,6 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: maxContentWidth,
     alignSelf: 'center',
-    paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.lg,
     paddingBottom: theme.spacing.xxl,
   },

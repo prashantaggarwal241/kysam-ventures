@@ -17,102 +17,147 @@ export interface FactCard {
   label: string;
 }
 
+export interface ClientContent {
+  name: string;
+  description: string;
+  sector: string;
+}
+
+// ── Home ──────────────────────────────────────────────────────────────────
 export const homeContent = {
-  eyebrow: 'BUILD · GROW · CREATE VALUE',
-  heading: 'Technology.\nExpertise.\nBusiness impact.',
+  eyebrow: 'AFC SPECIALIST · DELIVERY PARTNER · ENTERPRISE SOFTWARE',
+  heading: 'Technology\nDelivery.\nBusiness\noutcomes.',
   subtext:
-    'We help businesses modernise platforms, build scalable solutions, and create lasting technology partnerships.',
+    'Expert IT services and delivery partner for Automatic Fare Collection systems, enterprise software, and smart mobility solutions — trusted by Aurionpro Solutions and Sileo.',
   factCards: [
-    { stat: 'Graduates and engineers', label: 'From renowned universities' },
-    { stat: 'Executive and consulting', label: 'Partner or advisor roles' },
-    { stat: 'Target-oriented delivery', label: 'Outcomes over output' },
+    { stat: 'AFC Systems', label: 'End-to-end Automatic Fare Collection delivery' },
+    { stat: 'Product Company Partner', label: 'Trusted vendor for Aurionpro & Sileo' },
+    { stat: 'Full-Cycle Delivery', label: 'Development, QA, integration & managed support' },
   ] as FactCard[],
 } as const;
 
 export const whyKysam: WhyKysamItem[] = [
-  { icon: 'people-outline', label: 'Experienced\nteam' },
-  { icon: 'shield-checkmark-outline', label: 'Reliable\ndelivery' },
-  { icon: 'time-outline', label: 'Long-term\npartnerships' },
+  { icon: 'bus-outline', label: 'AFC & Transit\nExpertise' },
+  { icon: 'shield-checkmark-outline', label: 'Proven\nDelivery' },
+  { icon: 'briefcase-outline', label: 'Long-term\nVendor Partner' },
 ];
 
+// ── Clients ───────────────────────────────────────────────────────────────
+export const clients: ClientContent[] = [
+  {
+    name: 'Aurionpro Solutions',
+    description:
+      'BSE-listed global technology product company. KySam delivers AFC system development, integration, and application support for Aurionpro transit platforms deployed across major Indian cities.',
+    sector: 'Transit & Fare Technology',
+  },
+  {
+    name: 'Sileo',
+    description:
+      'Smart mobility and transport technology platform. KySam provides software development and systems integration services for the Sileo application suite.',
+    sector: 'Smart Mobility',
+  },
+];
+
+// ── Services ──────────────────────────────────────────────────────────────
 export const services: ServiceContent[] = [
   {
-    slug: 'technology-consulting',
-    name: 'Technology Consulting',
-    shortDescription: 'Strategic guidance to align technology with your business objectives.',
-    icon: 'laptop-outline',
+    slug: 'afc-system-development',
+    name: 'AFC System Development',
+    shortDescription:
+      'End-to-end Automatic Fare Collection system development, customisation, and integration for transit authorities and product companies.',
+    icon: 'git-network-outline',
+  },
+  {
+    slug: 'transit-technology',
+    name: 'Transit Technology Solutions',
+    shortDescription:
+      'Smart ticketing, passenger information systems, back-office reporting, and real-time data platforms for urban transit.',
+    icon: 'navigate-outline',
   },
   {
     slug: 'software-development',
-    name: 'Software Development',
-    shortDescription: 'Custom software solutions built to scale with your business.',
+    name: 'Software Development & QA',
+    shortDescription:
+      'Full-lifecycle software engineering and quality assurance — delivering to the standards required by enterprise product companies.',
     icon: 'code-slash-outline',
   },
   {
-    slug: 'cloud-devops',
-    name: 'Cloud & DevOps',
-    shortDescription: 'Streamlined cloud infrastructure and CI/CD pipelines for faster delivery.',
-    icon: 'cloud-outline',
+    slug: 'systems-integration',
+    name: 'Systems Integration',
+    shortDescription:
+      'Seamless integration of complex enterprise systems, payment gateways, APIs, and third-party platforms within AFC and mobility ecosystems.',
+    icon: 'git-merge-outline',
   },
   {
-    slug: 'digital-transformation',
-    name: 'Digital Transformation',
-    shortDescription: 'End-to-end transformation roadmaps that modernise how you operate.',
-    icon: 'flash-outline',
-  },
-  {
-    slug: 'it-advisory',
-    name: 'IT Advisory',
-    shortDescription: 'Expert advisory services for informed, risk-aware technology decisions.',
-    icon: 'bulb-outline',
-  },
-  {
-    slug: 'managed-technology-services',
-    name: 'Managed Technology Services',
-    shortDescription: 'Comprehensive managed services to keep your systems running smoothly.',
+    slug: 'managed-support',
+    name: 'Managed Support Services',
+    shortDescription:
+      'L2/L3 application support, incident management, and SLA-driven managed services for live transit deployments.',
     icon: 'settings-outline',
+  },
+  {
+    slug: 'technology-consulting',
+    name: 'Technology Consulting',
+    shortDescription:
+      'Strategic technology advisory for product companies seeking reliable delivery partners, capacity augmentation, and domain expertise.',
+    icon: 'bulb-outline',
   },
 ];
 
+// ── Expertise ─────────────────────────────────────────────────────────────
 export const expertiseAreas: string[] = [
-  'Enterprise Software',
-  'Cloud Computing',
-  'Software Architecture',
-  'Digital Transformation',
-  'Application Modernisation',
-  'DevOps & CI/CD',
-  'API & Microservices',
-  'Data & Integration',
+  'Automatic Fare Collection (AFC)',
+  'Transit & Smart Mobility Systems',
+  'Enterprise Java / .NET',
+  'Systems Integration & APIs',
+  'Database Design & ETL',
+  'Cloud Infrastructure & DevOps',
+  'Quality Assurance & Test Automation',
+  'L2/L3 Application Support',
 ];
 
 export const industries: string[] = [
-  'Financial Services',
-  'Insurance',
+  'Public Transit & Urban Mobility',
+  'Smart City Solutions',
+  'Financial Services & Payments',
+  'Enterprise Software',
   'Logistics & Supply Chain',
-  'Healthcare',
-  'Enterprise Technology',
 ];
 
+// ── About ─────────────────────────────────────────────────────────────────
 export const aboutContent = {
   eyebrow: 'FOUNDED · DELHI, INDIA',
-  heading: 'Building Technology Partnerships That Last',
-  body: 'KySam Ventures is a Delhi-based IT consultancy dedicated to helping businesses modernise platforms, build scalable solutions, and create lasting technology partnerships. Founded with a mission to bridge the gap between business needs and technology capabilities, we deliver enterprise-grade solutions with the agility of a boutique firm.',
+  heading: 'Your Technology\nDelivery Partner',
+  body: 'KySam Ventures is an IT service delivery company with deep expertise in Automatic Fare Collection (AFC) systems and enterprise software. We operate as a trusted technology vendor for Aurionpro Solutions and Sileo — delivering software development, QA, systems integration, and managed support services to power transit and enterprise technology platforms.',
   intro:
-    'KySam Ventures was formed by a group of professionals with wide exposure across information technology — young, qualified business graduates and engineers from renowned universities. Our team has consistently provided reliable support and consultancy to a wide variety of corporate houses, as executive, business partner, and consultant.',
+    'Our team comprises qualified engineers and technology professionals with direct delivery experience on AFC systems, transit technology, and enterprise platforms. We serve as a vendor and delivery partner for Aurionpro Solutions — a BSE-listed, globally recognised product company — and Sileo, delivering mission-critical fare collection and transport technology solutions.',
   philosophy:
-    'Our philosophy is building long-term business partnerships — where interpersonal relationship, reliability, assured quality, and target-oriented modern technology are the major building blocks.',
+    'We partner with product companies as long-term vendors — owning delivery quality, meeting SLAs, and scaling teams precisely when our clients need it.',
 } as const;
 
 export const coreValues: string[] = [
-  'Trust',
-  'Reliability',
-  'Quality',
-  'Innovation',
-  'Partnership',
-  'Excellence',
+  'Delivery Ownership',
+  'Quality Standards',
+  'SLA Adherence',
+  'Technical Depth',
+  'Client Partnership',
+  'Scalable Teams',
 ];
 
+// ── Contact ───────────────────────────────────────────────────────────────
 export const contactContent = {
   email: 'contact@kysamventures.com',
   location: 'Delhi, India',
 } as const;
+
+// Marquee items used on home
+export const SERVICE_TICKER = [
+  'AFC System Development',
+  'Transit Technology',
+  'Software QA & Engineering',
+  'Systems Integration',
+  'Managed Support',
+  'Technology Consulting',
+  'Aurionpro Partner',
+  'Sileo Partner',
+];

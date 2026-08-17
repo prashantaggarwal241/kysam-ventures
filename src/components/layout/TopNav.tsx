@@ -137,14 +137,14 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
           </View>
         )}
 
-        {/* Let's talk pill */}
+        {/* Contact pill */}
         <TouchableOpacity
           style={styles.letsTalkBtn}
           onPress={() => onNavigate('Contact')}
           accessibilityRole="button"
-          accessibilityLabel="Let's talk — navigate to Contact"
+          accessibilityLabel="Contact us"
         >
-          <Text style={styles.letsTalkText}>Let's talk</Text>
+          <Text style={styles.letsTalkText}>Contact us</Text>
         </TouchableOpacity>
       </View>
     </View>
