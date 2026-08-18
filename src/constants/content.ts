@@ -3,6 +3,7 @@ import type { IoniconName } from '../components/ui/IconBadge';
 export interface WhyKysamItem {
   icon: IoniconName;
   label: string;
+  description: string;
 }
 
 export interface ServiceContent {
@@ -38,9 +39,26 @@ export const homeContent = {
 } as const;
 
 export const whyKysam: WhyKysamItem[] = [
-  { icon: 'bus-outline', label: 'AFC & Transit\nExpertise' },
-  { icon: 'shield-checkmark-outline', label: 'Proven\nDelivery' },
-  { icon: 'briefcase-outline', label: 'Long-term\nVendor Partner' },
+  {
+    icon: 'bus-outline',
+    label: 'Automatic Fare\nCollection & Transit',
+    description: 'Deep hands-on expertise in AFC systems, smart ticketing, back-office platforms, and urban mobility technology.',
+  },
+  {
+    icon: 'shield-checkmark-outline',
+    label: 'Proven\nDelivery',
+    description: 'Long-term delivery partner to Aurionpro Solutions and Sileo — consistently meeting enterprise quality and SLA standards.',
+  },
+  {
+    icon: 'document-text-outline',
+    label: 'Record Digitisation\n& Gov Tech',
+    description: 'Converting physical and legacy records into structured digital systems — improving data access and operational efficiency for government and public-sector clients.',
+  },
+  {
+    icon: 'briefcase-outline',
+    label: 'Long-term\nVendor Partner',
+    description: 'We embed as an extension of your team — owning delivery quality and scaling capacity precisely when you need it.',
+  },
 ];
 
 // ── Clients ───────────────────────────────────────────────────────────────
@@ -57,7 +75,7 @@ export const clients: ClientContent[] = [
     description:
       'Smart mobility and transport technology platform. KySam provides software development and systems integration services for the Sileo application suite.',
     sector: 'Smart Mobility',
-    website: '',
+    website: 'https://thesileo.com',
   },
   {
     name: 'Jal Kal Prayagraj',
@@ -72,9 +90,9 @@ export const clients: ClientContent[] = [
 export const services: ServiceContent[] = [
   {
     slug: 'afc-system-development',
-    name: 'AFC System Development',
+    name: 'AFC — Automatic Fare Collection',
     shortDescription:
-      'End-to-end AFC system development, customisation, and integration for transit authorities and product companies.',
+      'End-to-end Automatic Fare Collection (AFC) system development, customisation, and integration for transit authorities and product companies.',
     icon: 'git-network-outline',
   },
   {
@@ -106,6 +124,13 @@ export const services: ServiceContent[] = [
     icon: 'settings-outline',
   },
   {
+    slug: 'record-digitisation',
+    name: 'Record Digitisation',
+    shortDescription:
+      'End-to-end conversion of physical and legacy records into structured digital formats — improving data access, searchability, and operational efficiency for government and enterprise organisations.',
+    icon: 'document-text-outline',
+  },
+  {
     slug: 'technology-consulting',
     name: 'Technology Consulting',
     shortDescription:
@@ -124,6 +149,7 @@ export const expertiseAreas: string[] = [
   'Cloud Infrastructure & DevOps',
   'Quality Assurance & Test Automation',
   'L2/L3 Application Support',
+  'Record Digitisation & Document Management',
 ];
 
 export const industries: string[] = [
@@ -158,12 +184,26 @@ export const coreValues: string[] = [
 // ── Contact ───────────────────────────────────────────────────────────────
 export const contactContent = {
   email: 'contact@kysamventures.com',
-  locations: ['Delhi', 'Noida'] as string[],
+  phone: '+91 98809 24255',
+  offices: [
+    {
+      city: 'Delhi',
+      type: 'Office',
+      address: '5/433-434, Mohalla Maharam,\nShahdara, Delhi-110032',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=5%2F433-434+Mohalla+Maharam+Shahdara+Delhi+110032',
+    },
+    {
+      city: 'Noida',
+      type: 'Cowork',
+      address: 'HA 05, near Sanskar Public School,\nBlock A, Sector 104, Noida,\nUttar Pradesh 201304',
+      mapUrl: 'https://www.google.com/maps/search/?api=1&query=HA+05+Sector+104+Noida+Uttar+Pradesh+201304',
+    },
+  ],
 } as const;
 
 // Marquee items used on home
 export const SERVICE_TICKER = [
-  'AFC System Development',
+  'Automatic Fare Collection (AFC)',
   'Transit Technology',
   'Software QA & Engineering',
   'Systems Integration',

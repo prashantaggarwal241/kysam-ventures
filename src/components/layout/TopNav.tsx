@@ -108,13 +108,18 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
   return (
     <View style={[styles.bar, { paddingTop: insets.top }]}>
       <View style={styles.row}>
-        {/* Logo + wordmark */}
-        <View style={styles.logoSection}>
-          <Logo size={28} />
+        {/* Logo + wordmark — taps navigate home */}
+        <TouchableOpacity
+          style={styles.logoSection}
+          onPress={() => onNavigate('Home')}
+          accessibilityRole="link"
+          accessibilityLabel="KySam Ventures — go to home"
+        >
+          <Logo size={40} />
           <Text style={styles.wordmark} numberOfLines={1}>
             KYSAM VENTURES
           </Text>
-        </View>
+        </TouchableOpacity>
 
         {/* Nav items with sliding underline */}
         {isNarrow ? (
@@ -142,7 +147,7 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
   );
 }
 
-const NAV_BAR_H = 52;
+const NAV_BAR_H = 64;
 
 const styles = StyleSheet.create({
   bar: {

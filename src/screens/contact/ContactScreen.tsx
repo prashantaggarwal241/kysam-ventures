@@ -17,9 +17,8 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
   const heroFontSize = winWidth < 600 ? 32 : winWidth < 1024 ? 42 : 52;
   const leftHeadingSize = winWidth < 600 ? 24 : 32;
 
-  const handleEmail = () => {
-    void Linking.openURL(`mailto:${contactContent.email}`);
-  };
+  const handleEmail = () => { void Linking.openURL(`mailto:${contactContent.email}`); };
+  const handlePhone = () => { void Linking.openURL(`tel:${contactContent.phone.replace(/\s/g, '')}`); };
 
   return (
     <ScreenContainer navigate={navigate}>
@@ -105,15 +104,49 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
 
                 <View style={styles.contactDivider} />
 
-                {/* Locations */}
+                {/* Phone */}
+                <TouchableOpacity
+                  style={styles.contactRow}
+                  onPress={handlePhone}
+                  accessibilityRole="link"
+                  accessibilityLabel="Call KySam Ventures"
+                >
+                  <View style={styles.contactIconBox}>
+                    <Text style={styles.contactIcon}>📞</Text>
+                  </View>
+                  <View style={styles.contactRowText}>
+                    <Text style={styles.contactRowLabel}>Phone</Text>
+                    <Text style={styles.contactRowValue}>{contactContent.phone}</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <View style={styles.contactDivider} />
+
+                {/* Offices */}
                 <View style={styles.contactRow}>
                   <View style={styles.contactIconBox}>
                     <Text style={styles.contactIcon}>📍</Text>
                   </View>
                   <View style={styles.contactRowText}>
                     <Text style={styles.contactRowLabel}>Offices</Text>
-                    {contactContent.locations.map(loc => (
-                      <Text key={loc} style={styles.contactRowValue}>{loc}, India</Text>
+                    {contactContent.offices.map(o => (
+                      <View key={o.city} style={styles.officeBlock}>
+                        <View style={styles.officeTagRow}>
+                          <Text style={styles.officeCity}>{o.city}</Text>
+                          <View style={styles.officeTypePill}>
+                            <Text style={styles.officeTypeText}>{o.type}</Text>
+                          </View>
+                        </View>
+                        <Text style={styles.officeAddress}>{o.address}</Text>
+                        <TouchableOpacity
+                          onPress={() => void Linking.openURL(o.mapUrl)}
+                          accessibilityRole="link"
+                          accessibilityLabel={`Open ${o.city} on Google Maps`}
+                          style={styles.mapLink}
+                        >
+                          <Text style={styles.mapLinkText}>📍 View on Google Maps →</Text>
+                        </TouchableOpacity>
+                      </View>
                     ))}
                   </View>
                 </View>
@@ -349,6 +382,49 @@ const styles = StyleSheet.create({
     fontFamily: theme.typography.fontBody,
     fontSize: theme.typography.size.small,
     color: theme.colors.textMuted,
+  },
+
+  officeBlock: {
+    marginTop: theme.spacing.sm,
+    gap: theme.spacing.xs,
+  },
+  officeTagRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
+  officeCity: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.body,
+    color: theme.colors.textPrimary,
+  },
+  officeTypePill: {
+    backgroundColor: theme.colors.blueTint,
+    borderRadius: theme.radius.pill,
+    paddingVertical: 2,
+    paddingHorizontal: theme.spacing.sm,
+  },
+  officeTypeText: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.blue,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  officeAddress: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textSecondary,
+    lineHeight: theme.typography.size.small * 1.65,
+  },
+  mapLink: {
+    marginTop: 4,
+    alignSelf: 'flex-start',
+  },
+  mapLinkText: {
+    fontFamily: theme.typography.fontBodyMedium,
+    fontSize: theme.typography.size.caption,
+    color: theme.colors.blue,
   },
 
   // ── Bottom band ──────────────────────────────────────────────────────────

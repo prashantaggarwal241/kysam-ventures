@@ -130,6 +130,7 @@ function FeatureCard({ item, delay }: { item: typeof whyKysam[0]; delay: number 
         <IconBadge iconName={item.icon} tone="blue" size="md" />
       </View>
       <Text style={styles.featureLabel}>{item.label.replace('\n', ' ')}</Text>
+      <Text style={styles.featureDesc}>{item.description}</Text>
     </AnimatedSection>
   );
 }
@@ -163,7 +164,7 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
             <Text style={[styles.heading, { fontSize: heroFontSize, lineHeight: heroFontSize * 1.18 }]}>
               Technology{'\n'}
               <Text style={styles.headingAccent}>Delivery.</Text>{'\n'}
-              Business{'\n'}outcomes.
+              Business{'\n'}Outcomes.
             </Text>
           </AnimatedSection>
 
@@ -225,7 +226,10 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
             <View style={styles.chartCard}>
               <View style={styles.chartCardHeader}>
                 <View style={styles.chartCardAccent} />
-                <Text style={styles.chartCardLabel}>DELIVERY GROWTH</Text>
+                <View>
+                  <Text style={styles.chartCardLabel}>Delivery Growth</Text>
+                  <Text style={styles.chartCardSub}>Year-on-year project volume</Text>
+                </View>
               </View>
               <GrowthChart />
             </View>
@@ -534,11 +538,16 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   chartCardLabel: {
-    fontFamily: theme.typography.fontBodyMedium,
+    fontFamily: theme.typography.fontDisplayBold,
+    fontSize: theme.typography.size.body,
+    color: theme.colors.navyHero,
+    letterSpacing: 0.2,
+  },
+  chartCardSub: {
+    fontFamily: theme.typography.fontBody,
     fontSize: theme.typography.size.caption,
     color: theme.colors.textMuted,
-    letterSpacing: 1.5,
-    textTransform: 'uppercase',
+    marginTop: 2,
   },
 
   featureGrid: {
@@ -573,6 +582,12 @@ const styles = StyleSheet.create({
     fontSize: theme.typography.size.h4,
     color: theme.colors.textPrimary,
     lineHeight: theme.typography.size.h4 * 1.4,
+  },
+  featureDesc: {
+    fontFamily: theme.typography.fontBody,
+    fontSize: theme.typography.size.small,
+    color: theme.colors.textSecondary,
+    lineHeight: theme.typography.size.small * 1.65,
   },
 
   marqueeSeparator: {

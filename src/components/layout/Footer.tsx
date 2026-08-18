@@ -60,8 +60,9 @@ export default function Footer({ navigate }: FooterProps) {
           <View style={styles.contactBlock}>
             <Text style={styles.navHeading}>CONTACT</Text>
             <Text style={styles.contactText}>{contactContent.email}</Text>
-            {contactContent.locations.map(loc => (
-              <Text key={loc} style={styles.contactText}>{loc}, India</Text>
+            <Text style={styles.contactText}>{contactContent.phone}</Text>
+            {contactContent.offices.map(o => (
+              <Text key={o.city} style={styles.contactText}>{o.city} · {o.type}</Text>
             ))}
             {navigate && (
               <TouchableOpacity
