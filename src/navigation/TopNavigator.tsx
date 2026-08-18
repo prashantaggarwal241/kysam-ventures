@@ -13,7 +13,7 @@ import ServicesScreen from '../screens/services/ServicesScreen';
 import ExpertiseScreen from '../screens/expertise/ExpertiseScreen';
 import ContactScreen from '../screens/contact/ContactScreen';
 
-const MOBILE_NAV_H = 60;
+const MOBILE_NAV_H = 68;
 
 export default function TopNavigator() {
   const [activeRoute, setActiveRoute] = useState<RouteKey>('Home');
@@ -70,7 +70,7 @@ export default function TopNavigator() {
             accessibilityRole="link"
             accessibilityLabel="KySam Ventures — go to home"
           >
-            <Logo size={34} />
+            <Logo size={48} />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

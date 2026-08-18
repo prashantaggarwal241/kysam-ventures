@@ -53,7 +53,7 @@ export default function ExpertiseScreen({ navigate }: ExpertiseScreenProps) {
               styles.sectionHeading,
               { fontSize: sectionFontSize, lineHeight: sectionFontSize * 1.25 },
             ]}>
-              Eight technology domains,{'\n'}led by AFC & transit.
+              Nine technology domains,{'\n'}led by AFC & transit.
             </Text>
           </AnimatedSection>
 

@@ -29,7 +29,7 @@ import type { ServiceContent } from '../../constants/content';
 
 export type HomeScreenProps = ScreenProps;
 
-const COUNTER_TARGET = 6;
+const COUNTER_TARGET = 7;
 const COUNTER_DURATION_MS = 900;
 const COUNTER_STEP_MS = 60;
 

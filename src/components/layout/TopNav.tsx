@@ -115,7 +115,7 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
           accessibilityRole="link"
           accessibilityLabel="KySam Ventures — go to home"
         >
-          <Logo size={40} />
+          <Logo size={90} />
         </TouchableOpacity>
 
         {/* Nav items with sliding underline */}
@@ -144,7 +144,7 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
   );
 }
 
-const NAV_BAR_H = 64;
+const NAV_BAR_H = 104;
 
 const styles = StyleSheet.create({
   bar: {
