@@ -10,7 +10,6 @@ import Animated, {
 import ScreenContainer from '../../components/layout/ScreenContainer';
 import PageWrapper from '../../components/layout/PageWrapper';
 import Button from '../../components/ui/Button';
-import GrowthChart from '../../components/ui/GrowthChart';
 import IconBadge from '../../components/ui/IconBadge';
 import Marquee from '../../components/ui/Marquee';
 import HeroBackground from '../../components/ui/HeroBackground';
@@ -221,20 +220,6 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
       <View style={styles.featuresSection}>
         <PageWrapper style={styles.featuresSectionContent}>
 
-          {/* Floating Growth Chart card */}
-          <AnimatedSection delay={0} style={styles.chartWrap}>
-            <View style={styles.chartCard}>
-              <View style={styles.chartCardHeader}>
-                <View style={styles.chartCardAccent} />
-                <View>
-                  <Text style={styles.chartCardLabel}>Delivery Growth</Text>
-                  <Text style={styles.chartCardSub}>Year-on-year project volume</Text>
-                </View>
-              </View>
-              <GrowthChart />
-            </View>
-          </AnimatedSection>
-
           {/* Why KySam feature cards */}
           <View style={[styles.featureGrid, isDesktop && styles.featureGridDesktop]}>
             {whyKysam.map((item, i) => (
@@ -302,14 +287,13 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
 }
 
 // ── Styles ────────────────────────────────────────────────────────────────
-const HERO_OVERLAP = 64;
 
 const styles = StyleSheet.create({
 
   // ── Hero ────────────────────────────────────────────────────────────────
   hero: {
     backgroundColor: theme.colors.navyHero,
-    paddingBottom: HERO_OVERLAP,
+
     overflow: 'hidden',
     position: 'relative',
   },
@@ -509,46 +493,6 @@ const styles = StyleSheet.create({
     gap: theme.spacing.xxl,
   },
 
-  chartWrap: {
-    marginTop: -HERO_OVERLAP,
-    zIndex: 10,
-  },
-  chartCard: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    padding: theme.spacing.xl,
-    elevation: 8,
-    shadowColor: theme.colors.navyHero,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
-    gap: theme.spacing.md,
-  },
-  chartCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  chartCardAccent: {
-    width: 3,
-    height: 14,
-    backgroundColor: theme.colors.amber,
-    borderRadius: 2,
-  },
-  chartCardLabel: {
-    fontFamily: theme.typography.fontDisplayBold,
-    fontSize: theme.typography.size.body,
-    color: theme.colors.navyHero,
-    letterSpacing: 0.2,
-  },
-  chartCardSub: {
-    fontFamily: theme.typography.fontBody,
-    fontSize: theme.typography.size.caption,
-    color: theme.colors.textMuted,
-    marginTop: 2,
-  },
 
   featureGrid: {
     flexDirection: 'row',
