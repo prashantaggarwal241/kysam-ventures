@@ -116,9 +116,6 @@ export default function TopNav({ activeRoute, onNavigate }: TopNavProps) {
           accessibilityLabel="KySam Ventures — go to home"
         >
           <Logo size={40} />
-          <Text style={styles.wordmark} numberOfLines={1}>
-            KYSAM VENTURES
-          </Text>
         </TouchableOpacity>
 
         {/* Nav items with sliding underline */}
@@ -176,12 +173,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: theme.spacing.xs,
     flexShrink: 0,
-  },
-  wordmark: {
-    fontFamily: theme.typography.fontDisplay,
-    fontSize: 10,
-    letterSpacing: 1.5,
-    color: theme.colors.navyHero,
   },
   scrollFlex: {
     flex: 1,

@@ -71,9 +71,6 @@ export default function TopNavigator() {
             accessibilityLabel="KySam Ventures — go to home"
           >
             <Logo size={34} />
-            <Text style={styles.mobileWordmark} numberOfLines={1}>
-              KYSAM VENTURES
-            </Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -143,12 +140,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: theme.spacing.xs,
     flex: 1,
-  },
-  mobileWordmark: {
-    fontFamily: theme.typography.fontDisplay,
-    fontSize: 10,
-    letterSpacing: 1.5,
-    color: theme.colors.navyHero,
   },
 
   // Shared
