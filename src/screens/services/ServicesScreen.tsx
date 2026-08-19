@@ -105,12 +105,12 @@ export default function ServicesScreen({ navigate }: ServicesScreenProps) {
               styles.heroHeading,
               { fontSize: heroFontSize, lineHeight: heroFontSize * 1.2 },
             ]}>
-              Six delivery lines.{'\n'}One trusted partner.
+              Seven service lines.{'\n'}One delivery partner.
             </Text>
           </AnimatedSection>
           <AnimatedSection delay={160}>
             <Text style={styles.heroSubtext}>
-              Covering the full technology lifecycle — from AFC and transit platforms to enterprise software and government digitisation — for product companies and public-sector clients.
+              From AFC and transit platforms to enterprise software and government digitisation — covering the full technology lifecycle for product companies and public-sector organisations.
             </Text>
           </AnimatedSection>
         </PageWrapper>

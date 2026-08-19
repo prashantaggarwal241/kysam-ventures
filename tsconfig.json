@@ -6,7 +6,8 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "dom"
     ],
     "types": [
       "jest",

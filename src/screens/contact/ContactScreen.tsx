@@ -36,7 +36,7 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
               styles.heroHeading,
               { fontSize: heroFontSize, lineHeight: heroFontSize * 1.22 },
             ]}>
-              Ready to build something{'\n'}great together?
+              Start a conversation{'\n'}with our team.
             </Text>
           </AnimatedSection>
         </PageWrapper>
@@ -54,11 +54,11 @@ export default function ContactScreen({ navigate }: ContactScreenProps) {
                 styles.leftHeading,
                 { fontSize: leftHeadingSize, lineHeight: leftHeadingSize * 1.3 },
               ]}>
-                We partner with businesses to create lasting technology outcomes.
+                We partner with product companies and public-sector organisations to deliver technology on time, to specification, and at scale.
               </Text>
               <View style={styles.leftAccent} />
               <Text style={styles.leftBody}>
-                Whether you have a specific technology challenge, a new idea you'd like to explore, or simply want to understand how we can support your business — we'd love to hear from you.
+                If you have a technology challenge to solve, a project to scope, or want to understand how we work — we are straightforward to reach and quick to respond.
               </Text>
 
               {/* Three mini-highlights */}

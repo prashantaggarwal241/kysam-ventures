@@ -267,15 +267,15 @@ export default function HomeScreen({ navigate }: HomeScreenProps) {
       <View style={styles.ctaBand}>
         <HeroBackground />
         <PageWrapper style={styles.ctaBandContent}>
-          <Text style={styles.ctaBandEyebrow}>READY TO PARTNER?</Text>
+          <Text style={styles.ctaBandEyebrow}>WORK WITH US</Text>
           <Text style={[
             styles.ctaBandHeading,
             { fontSize: ctaFontSize, lineHeight: ctaFontSize * 1.25 },
           ]}>
-            Looking for a reliable IT delivery{'\n'}partner or specialist vendor?
+            Evaluating a delivery partner{'\n'}or specialist technology vendor?
           </Text>
           <Text style={styles.ctaBandSub}>
-            We bring AFC expertise, proven delivery track record, and the capacity to scale — exactly what product companies need in a long-term technology partner.
+            AFC domain expertise, an established delivery track record, and the flexibility to scale alongside your roadmap — talk to our team.
           </Text>
           <View style={styles.ctaBandRule} />
           <Button label="Get in touch" onPress={() => navigate('Contact')} />

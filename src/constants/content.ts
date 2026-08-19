@@ -30,11 +30,11 @@ export const homeContent = {
   eyebrow: 'IT SERVICES · DELIVERY PARTNER · TRANSIT TECHNOLOGY',
   heading: 'Technology\nDelivery.\nBusiness\nOutcomes.',
   subtext:
-    'Specialist technology services for Automatic Fare Collection systems, enterprise software, and smart mobility — trusted by Aurionpro Solutions and Sileo as a long-term delivery partner.',
+    'We specialise in Automatic Fare Collection systems, enterprise software, and transit technology — operating as a long-term delivery partner to Aurionpro Solutions and Sileo.',
   factCards: [
     { stat: 'AFC Systems', label: 'End-to-end Automatic Fare Collection delivery' },
-    { stat: 'Product Company Partner', label: 'Trusted vendor for Aurionpro & Sileo' },
-    { stat: 'Full-Cycle Delivery', label: 'Development, QA, integration & managed support' },
+    { stat: 'Vendor Partner', label: 'Aurionpro Solutions & Sileo — long-term engagements' },
+    { stat: 'Full-Cycle Delivery', label: 'Development · QA · Integration · Managed Support' },
   ] as FactCard[],
 } as const;
 
@@ -42,22 +42,22 @@ export const whyKysam: WhyKysamItem[] = [
   {
     icon: 'bus-outline',
     label: 'Automatic Fare\nCollection & Transit',
-    description: 'Deep hands-on expertise in AFC systems, smart ticketing, back-office platforms, and urban mobility technology.',
+    description: 'Practical AFC experience — ticketing systems, back-office platforms, smart mobility integration, and live deployments.',
   },
   {
     icon: 'shield-checkmark-outline',
     label: 'Proven\nDelivery',
-    description: 'Long-term delivery partner to Aurionpro Solutions and Sileo — consistently meeting enterprise quality and SLA standards.',
+    description: 'Long-term vendor to Aurionpro Solutions and Sileo. We deliver to enterprise quality standards, on schedule, with SLA accountability.',
   },
   {
     icon: 'document-text-outline',
     label: 'Record Digitisation\n& Gov Tech',
-    description: 'Converting physical and legacy records into structured digital systems — improving data access and operational efficiency for government and public-sector clients.',
+    description: 'Executed a full record digitisation programme for Jal Kal Prayagraj — converting legacy physical records into searchable, structured digital formats.',
   },
   {
     icon: 'briefcase-outline',
     label: 'Long-term\nVendor Partner',
-    description: 'We embed as an extension of your team — owning delivery quality and scaling capacity precisely when you need it.',
+    description: 'We operate as an extension of your team — accountable for quality, available when you need capacity, and invested in your product.',
   },
 ];
 
@@ -92,49 +92,49 @@ export const services: ServiceContent[] = [
     slug: 'afc-system-development',
     name: 'AFC — Automatic Fare Collection',
     shortDescription:
-      'End-to-end Automatic Fare Collection (AFC) system development, customisation, and integration for transit authorities and product companies.',
+      'Development, customisation, and integration of Automatic Fare Collection systems for transit authorities and technology product companies.',
     icon: 'git-network-outline',
   },
   {
     slug: 'transit-technology',
-    name: 'Transit Technology Solutions',
+    name: 'Transit Technology',
     shortDescription:
-      'Smart ticketing, passenger information systems, back-office reporting, and real-time data platforms for urban transit.',
+      'Smart ticketing, passenger information systems, back-office reporting, and real-time data platforms for urban transit operators.',
     icon: 'navigate-outline',
   },
   {
     slug: 'software-development',
     name: 'Software Development & QA',
     shortDescription:
-      'Full-lifecycle software engineering and quality assurance — delivering to the standards required by enterprise product companies.',
+      'Full-cycle software engineering and quality assurance for enterprise product companies — from specification through release and post-launch support.',
     icon: 'code-slash-outline',
   },
   {
     slug: 'systems-integration',
     name: 'Systems Integration',
     shortDescription:
-      'Seamless integration of complex enterprise systems, payment gateways, APIs, and third-party platforms within AFC and mobility ecosystems.',
+      'Integration of enterprise systems, payment gateways, APIs, and third-party platforms within AFC and mobility environments.',
     icon: 'git-merge-outline',
   },
   {
     slug: 'managed-support',
-    name: 'Managed Support Services',
+    name: 'Managed Support',
     shortDescription:
-      'L2/L3 application support, incident management, and SLA-driven managed services for live transit deployments.',
+      'L2 and L3 application support, incident management, and SLA-based managed services for live AFC and transit deployments.',
     icon: 'settings-outline',
   },
   {
     slug: 'record-digitisation',
     name: 'Record Digitisation',
     shortDescription:
-      'End-to-end conversion of physical and legacy records into structured digital formats — improving data access, searchability, and operational efficiency for government and enterprise organisations.',
+      'Converting physical and legacy records into structured digital formats — improving data access, searchability, and operational efficiency for government and enterprise organisations.',
     icon: 'document-text-outline',
   },
   {
     slug: 'technology-consulting',
     name: 'Technology Consulting',
     shortDescription:
-      'Strategic technology advisory for product companies seeking reliable delivery partners, capacity augmentation, and domain expertise.',
+      'Technology advisory for product companies — covering vendor selection, delivery partner assessment, capacity planning, and domain expertise in AFC and transit.',
     icon: 'bulb-outline',
   },
 ];
@@ -165,11 +165,11 @@ export const industries: string[] = [
 export const aboutContent = {
   eyebrow: 'FOUNDED · DELHI, INDIA',
   heading: 'Your Technology\nDelivery Partner',
-  body: 'KySam Ventures is an IT services company with deep domain expertise in Automatic Fare Collection (AFC) systems, enterprise software, and government technology. We work as a delivery partner for Aurionpro Solutions and Sileo, and as a specialist technology vendor for public-sector organisations such as Jal Kal Prayagraj — building, integrating, and supporting systems that power transit infrastructure and public services across India.',
+  body: 'KySam Ventures is a Delhi-based IT services company. Our core work is Automatic Fare Collection (AFC) systems, enterprise software, and government technology. We function as a delivery partner for Aurionpro Solutions and Sileo, and as a specialist technology vendor for public-sector organisations — building, integrating, and supporting systems that underpin transit infrastructure and public services across India.',
   intro:
-    'Our engineering team brings hands-on delivery experience across AFC systems, transit technology, enterprise platforms, and government digitisation. We serve Aurionpro Solutions — a BSE-listed, globally recognised product company — and Sileo, alongside public-sector bodies such as Jal Kal Prayagraj, for whom we delivered a comprehensive record digitisation programme.',
+    'Our engineering team has direct, hands-on experience across AFC systems, transit technology, enterprise platforms, and government digitisation. We work with Aurionpro Solutions — a BSE-listed, globally active product company — and Sileo, as well as public-sector organisations such as Jal Kal Prayagraj, for whom we executed a full record digitisation programme.',
   philosophy:
-    'We partner with product companies and public organisations as long-term vendors — owning delivery quality, meeting SLAs, and scaling teams precisely when our clients need it.',
+    'We work with product companies and public organisations as a long-term vendor — accountable for delivery quality, SLA adherence, and scaling capacity when our clients need it.',
 } as const;
 
 export const coreValues: string[] = [
